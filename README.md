@@ -1,7 +1,15 @@
-# Inverse-Kinematic-of-Serial-Manipulator-Robots
-Autor; David Oliveira Santos
-Orientadores 
-O projeto trata-se de implementações de métodos de Soluções de Cinemática Inversa para Robôs manipuladors seriais utilizando a linguagem de programação python, o robô foco é o Pioneer 7DOF 
+# Soluções de Cinemática Inversa de Robôs manipuladores Seriais com Restrições Físicas
+
+<div align= "center">
+<img src="https://user-images.githubusercontent.com/71639876/159167377-a011678a-c0fe-42c8-8fd2-097f6e7c3295.png" width="200px" />
+</div>
+
+
+Autor: David Oliveira Santos
+
+Orientadores: Elyson Carvalho, Lucas Molina, Eduardo Freire e José Carvalho.
+
+Este repósitorio trata-se de implementações de métodos de Soluções de Cinemática Inversa para Robôs manipuladors seriais utilizando a linguagem de programação python ao robô Pioneer 7DOF. 
 
 Implementações feitas durante o Programação de Iniciação Científica-PIBIC intitulada:
 PIB10456-2021 - Soluções de cinemática inversa de robôs manipuladores seriais com restrições físicas
