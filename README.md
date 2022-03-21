@@ -12,8 +12,8 @@ Orientadores: Elyson Carvalho, Lucas Molina, Eduardo Freire e José Carvalho.
 Este repósitorio trata-se de implementações de métodos de Soluções de Cinemática Inversa para Robôs manipuladors seriais utilizando a linguagem de programação python ao robô Pioneer 7DOF. 
 
 Implementações feitas durante um projeto no Programa de Iniciação Científica-PIBIC na Universidade Federal de Sergipe - UFS intitulado:
-PIB10456-2021 - Soluções de cinemática inversa de robôs manipuladores seriais com restrições físicas
-Durante o período: PIBIC 2021/2022 (01/09/2021 a 31/08/2022).
+PIB10456-2021 - Soluções de cinemática inversa de robôs manipuladores seriais com restrições físicas,
+durante o período: PIBIC 2021/2022 (01/09/2021 a 31/08/2022).
 
 Para rodar os códigos é necessário instalar as bibliotecas numpy, sys e random.
 
