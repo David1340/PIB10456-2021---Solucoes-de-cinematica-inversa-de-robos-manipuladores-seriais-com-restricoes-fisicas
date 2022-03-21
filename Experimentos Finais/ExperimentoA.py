@@ -45,8 +45,8 @@ mi = tc.copy()
 for i in range(repeticoes):
     print('i:',i)
     #Gerando a cnfiguração inicial
-    for i in range(np.size(q)):
-        q[i] = random.uniform(-qlim[i],qlim[i])
+    for i2 in range(np.size(q)):
+        q[i2] = random.uniform(-qlim[i2],qlim[i2])
 
     [posicaod,orientacaod] = random_pose()
 
