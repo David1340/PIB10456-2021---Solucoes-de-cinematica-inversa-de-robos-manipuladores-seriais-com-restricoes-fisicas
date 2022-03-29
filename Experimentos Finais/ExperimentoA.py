@@ -10,10 +10,12 @@
 import numpy as np
 import random 
 import sys
+import os
 
 #Import diretorio e funções
-sys.path.append('C:\PIBIC 2022 - Python')
-sys.path.append('C:\PIBIC 2022 - Python\Experimentos Finais\Metodos')
+diretorio_atual = os.getcwd()
+sys.path.append(diretorio_atual)
+sys.path.append(diretorio_atual + '\Experimentos Finais\Metodos')
 
 from funcoes import random_pose
 from DLS import DLS
@@ -42,6 +44,7 @@ kCCD = []
 kFABRIK = []
 tc = [0,0,0,0,0,0,0]
 mi = tc.copy()
+
 for i in range(repeticoes):
     print('i:',i)
     #Gerando a cnfiguração inicial

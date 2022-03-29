@@ -10,10 +10,12 @@
 import numpy as np
 import random 
 import sys
+import os
 
 #Import diretorio e funções
-sys.path.append('C:\PIBIC 2022 - Python')
-sys.path.append('C:\PIBIC 2022 - Python\Experimentos Finais\Metodos')
+diretorio_atual = os.getcwd()
+sys.path.append(diretorio_atual)
+sys.path.append(diretorio_atual + '\Experimentos Finais\Metodos')
 
 from funcoes import random_pose
 from pioneer_7dof import getLimits

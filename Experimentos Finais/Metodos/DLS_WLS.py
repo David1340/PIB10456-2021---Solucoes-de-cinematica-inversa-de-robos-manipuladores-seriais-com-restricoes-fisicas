@@ -9,14 +9,10 @@
 #PIB10456-2021 - Soluções de cinemática inversa de robôs manipuladores seriais com restrições físicas
 #Durante o período: PIBIC 2021/2022 (01/09/2021 a 31/08/2022).
 
-#Import do modulo funcoes.py
-import sys
-sys.path.append('C:\PIBIC 2022 - Python')
-from funcoes import matriz_homogenea, distancia, S
-
 #Import das bibliotecas python
-from math import pi
 import numpy as np
+
+from funcoes import matriz_homogenea, distancia, S
 from pioneer_7dof import getDH_paramaters, getLimits
 
 def DLS_WLS(posicaod,q,erro_min,Kmax):

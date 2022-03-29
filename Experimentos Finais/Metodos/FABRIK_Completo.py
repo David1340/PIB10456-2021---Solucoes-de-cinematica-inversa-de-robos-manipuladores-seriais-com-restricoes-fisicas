@@ -7,15 +7,15 @@
 #PIB10456-2021 - Soluções de cinemática inversa de robôs manipuladores seriais com restrições físicas
 #Durante o período: PIBIC 2021/2022 (01/09/2021 a 31/08/2022).
 
+from math import pi,acos
+import numpy as np
+
 #Import do modulo funcoes.py
-import sys
-sys.path.append('/home/david/Pibic2021/Inverse-Kinematic-of-Serial-Manipulator-Robots/Simulacoes_Ros')
-from funcoes import Cinematica_Direta2, norm, distancia, random_pose, S \
+from funcoes import Cinematica_Direta2, norm, distancia, S \
                     , rotationar_vetor, projecao_ponto_plano, Cinematica_Direta3 \
                         ,orientacao
 
-from math import pi,acos
-import numpy as np
+
 
 #criar um vetor coluna a partir de uma lista
 def vetor(v):   

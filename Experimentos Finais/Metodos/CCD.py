@@ -8,16 +8,15 @@
 #Durante o período: PIBIC 2021/2022 (01/09/2021 a 31/08/2022).
 
 
-#Import do modulo funcoes.py
-import sys
-sys.path.append('C:\PIBIC 2022 - Python')
+#Import das bibliotecas python
+from math import sqrt, pi, acos
+import numpy as np
+
 from funcoes import matriz_homogenea, distancia, Cinematica_Direta
 from funcoes import projecao_ponto_plano, rotationar_vetor
 from pioneer_7dof import getDH_paramaters, getLimits
 
-#Import das bibliotecas python
-from math import sqrt, pi, acos
-import numpy as np
+
 
 
 #Calcula o acos de um angulo arrendondado em 10 casas decimais

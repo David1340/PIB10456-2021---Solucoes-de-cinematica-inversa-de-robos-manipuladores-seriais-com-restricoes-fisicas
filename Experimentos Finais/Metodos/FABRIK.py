@@ -7,14 +7,12 @@
 #PIB10456-2021 - Soluções de cinemática inversa de robôs manipuladores seriais com restrições físicas
 #Durante o período: PIBIC 2021/2022 (01/09/2021 a 31/08/2022).
 
-#Import do modulo funcoes.py
-import sys
-sys.path.append('C:\PIBIC 2022 - Python')
-from funcoes import Cinematica_Direta2, norm, distancia, random_pose, S \
-                    , rotationar_vetor, projecao_ponto_plano
-
 from math import pi,acos
 import numpy as np
+
+#Import do modulo funcoes.py
+from funcoes import Cinematica_Direta2, norm, distancia, S \
+                    , rotationar_vetor, projecao_ponto_plano
 
 #criar um vetor coluna a partir de uma lista
 def vetor(v):   
