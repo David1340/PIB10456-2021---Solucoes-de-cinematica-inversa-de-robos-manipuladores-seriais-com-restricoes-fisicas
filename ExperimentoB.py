@@ -15,7 +15,7 @@ import os
 #Import diretorio e funções
 diretorio_atual = os.getcwd()
 sys.path.append(diretorio_atual)
-sys.path.append(diretorio_atual + '\Experimentos Finais\Metodos')
+sys.path.append(diretorio_atual + '\Metodos')
 
 from funcoes import random_pose
 from pioneer_7dof import getLimits
