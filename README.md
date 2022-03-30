@@ -17,8 +17,8 @@ durante o período: PIBIC 2021/2022 (01/09/2021 a 31/08/2022).
 
 Para rodar os códigos é necessário instalar as bibliotecas numpy, sys e random.
 
-Caso deseje rodar o código Experimento A, certifique-se que a variável k1 (constante que pondera o erro de orientação) dos códigos PSO e FRPSO nas linhas 79 e 61 respectivamente está igual a 0. Os resultados serão salvos em um arquivo chamado 'experimentoA2.txt'.
+Caso deseje rodar o código Experimento A, certifique-se que a variável k1 (constante que pondera o erro de orientação) dos códigos PSO e FRPSO nas linhas 76 e 59 respectivamente está igual a 0. Os resultados serão salvos em um arquivo chamado 'experimentoA2.txt'.
 
-Caso deseje rodar o código Experimento B, certifique-se que a variável k1 (constante que pondera o erro de orientação) dos códigos PSO e FRPSO nas linhas 79 e 61 respectivamente está diferente a 0. Os resultados serão salvos em um arquivo chamado 'experimentoB2.txt'.
+Caso deseje rodar o código Experimento B, certifique-se que a variável k1 (constante que pondera o erro de orientação) dos códigos PSO e FRPSO nas linhas 76 e 59 respectivamente está diferente a 0. Os resultados serão salvos em um arquivo chamado 'experimentoB2.txt'.
 
 O presente trabalho foi realizado com apoio do CNPq, Conselho Nacional de Desenvolvimento científico e Tecnológico -  Brasil.
