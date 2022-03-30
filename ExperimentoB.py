@@ -11,11 +11,14 @@ import numpy as np
 import random 
 import sys
 import os
-
+import platform
 #Import diretorio e funções
 diretorio_atual = os.getcwd()
 sys.path.append(diretorio_atual)
-sys.path.append(diretorio_atual + '\Metodos')
+if(platform.system == 'Windows'):
+    sys.path.append(diretorio_atual + '\Metodos')
+else:
+    sys.path.append(diretorio_atual + '/Metodos')
 
 from funcoes import random_pose
 from pioneer_7dof import getLimits
@@ -31,7 +34,7 @@ qlim = getLimits()
 
 Kmax = 1000
 erro_min = 0.001
-repeticoes = 1000
+repeticoes = 10
 
 kDLS = []
 kDLS_WLS = []

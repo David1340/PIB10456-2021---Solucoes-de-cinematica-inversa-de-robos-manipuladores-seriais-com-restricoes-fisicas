@@ -11,11 +11,15 @@ import numpy as np
 import random 
 import sys
 import os
+import platform
 
 #Import diretorio e funções
 diretorio_atual = os.getcwd()
 sys.path.append(diretorio_atual)
-sys.path.append(diretorio_atual + '\Metodos')
+if(platform.system == 'Windows'):
+    sys.path.append(diretorio_atual + '\Metodos')
+else:
+    sys.path.append(diretorio_atual + '/Metodos')
 
 from funcoes import random_pose
 from DLS import DLS
