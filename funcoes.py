@@ -285,3 +285,20 @@ def rotationar_vetor(p,v,th):
 #Calcula a norma de um vetor 
 def norm(v):
     return sqrt(v[[0]]**2 + v[[1]]**2 + v[[2]]**2)
+
+def matriz_homogenea_final(d,a,alpha,theta,metodo = None):
+    Tn = np.eye(4)
+    n = len(a)
+    if(metodo == 'CCD'):
+        Vy = []
+        for i in range(n):
+            Tn = Tn@matriz_homogenea(d[i],a[i],alpha[i],theta[i])
+            Vy.append(Tn[0:3,1])
+        return Tn,np.array(Vy).T
+    else:
+        for i in range(n):
+            Tn = Tn@matriz_homogenea(d[i],a[i],alpha[i],theta[i])
+        
+        return Tn
+
+
