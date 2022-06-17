@@ -15,12 +15,11 @@ import platform
 
 #Import diretorio e funções
 diretorio_atual = os.getcwd()
-sys.path.append(diretorio_atual)
 if(platform.system == 'Windows'):
     sys.path.append(diretorio_atual + '\Metodos')
 else:
     sys.path.append(diretorio_atual + '/Metodos')
-
+sys.path.append(diretorio_atual)
 
 from DLS import DLS
 from CCD import CCD
@@ -29,16 +28,21 @@ from DLS_Completo import DLS_Completo
 from DLS_WLS_Completo import DLS_WLS_Completo
 from GradDesc import GradDesc
 from GradDesc_Completo import GradDesc_Completo
-from pioneer_7dof import *
+from FABRIK import FABRIK
+from FABRIK_Completo import FABRIK_Completo
+from PSO import PSO
+from FRPSO import FRPSO
+from manipulador_15dof import *
 
 #Configurações do experimento
 Kmax = 1000
 erro_min = 0.001
-repeticoes = 1000
+repeticoes = 100
 
 #valor maximo que a junta pode assumir
 qlim = getLimits() 
 n = getNumberJoints()
+
 q = np.zeros([n,1])
 kk =[]
 for i in range(repeticoes):
@@ -49,7 +53,7 @@ for i in range(repeticoes):
 
     [posicaod,orientacaod] = random_pose()
 
-    [erro,k] = GradDesc_Completo(posicaod,orientacaod,q.copy(),erro_min,Kmax)
+    [erro,k] = FRPSO(posicaod,orientacaod,erro_min,Kmax)
     if(erro < erro_min):
         kk.append(k)
 

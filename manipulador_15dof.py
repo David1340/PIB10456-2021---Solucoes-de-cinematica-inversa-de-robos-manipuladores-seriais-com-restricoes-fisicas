@@ -9,7 +9,7 @@
 from  math import pi
 import numpy as np
 from funcoes import matriz_homogenea, S
-import random
+from random import uniform
 
 def getDH_paramaters(q):
     base = 0.05
@@ -263,7 +263,7 @@ def random_pose():
     #angulos de juntas iniciais
     q = np.zeros([n,1])
     for a in range(np.size(q)):
-        q[a] = random.uniform(-qlim[a],qlim[a])
+        q[a] = uniform(-qlim[a],qlim[a])
 
     return Cinematica_Direta3(q)
 

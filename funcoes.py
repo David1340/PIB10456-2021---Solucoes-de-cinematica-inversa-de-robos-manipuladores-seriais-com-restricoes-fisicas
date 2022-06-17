@@ -155,8 +155,6 @@ def Cinematica_Direta(q):
                     ,p5_0[0:3,0],p6_0[0:3,0],p7_0[0:3,0],p8_0[0:3,0]]).T
     return pontos
 
-#Calcula a posição das juntas a partir da configuração q
-#e seus vetores de atuação
 def Cinematica_Direta2(q):
     #Pontos de interesse
     L = 0.075 #distância da ultima junta a extremidade do efetuador
@@ -209,8 +207,7 @@ def Cinematica_Direta2(q):
                         ,T7[0:3,1]]).T
     return [pontos,vetores]
 
-#Calcula a posição das juntas a partir da configuração q
-#e seus vetores de atuação
+
 def Cinematica_Direta3(q):
     #Pontos de interesse
     L = 0.075 #distância da ultima junta a extremidade do efetuador

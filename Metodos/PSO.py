@@ -14,8 +14,8 @@ from random import random,uniform
 import numpy as np
 
 #Import do modulo funcoes.py
-from funcoes import matriz_homogenea, distancia, orientacao
-from pioneer_7dof import getDH_paramaters, getLimits
+from funcoes import distancia, orientacao
+from manipulador_15dof import *
 
 class particle:
     def __init__(self,position,dimension):
@@ -49,25 +49,10 @@ class particle:
             
     def update_fuction(self,o,o2): #Calcula a função de custo/fitness da particula
         #(posição,orientacao) da pose desejada
-        
-        #Parâmetros de DH e ponto de atuação
-        d,a,alpha,theta,p = getDH_paramaters(self.p)
-       
-        #Matrizes homogêneas
-        A1 = matriz_homogenea(d[0],a[0],alpha[0],theta[0])
-        A2 = matriz_homogenea(d[1],a[1],alpha[1],theta[1])
-        A3 = matriz_homogenea(d[2],a[2],alpha[2],theta[2])
-        A4 = matriz_homogenea(d[3],a[3],alpha[3],theta[3])
-        A5 = matriz_homogenea(d[4],a[4],alpha[4],theta[4])
-        A6 = matriz_homogenea(d[5],a[5],alpha[5],theta[5])
-        A7 = matriz_homogenea(d[6],a[6],alpha[6],theta[6])
-        A = A1@(A2@(A3@(A4@(A5@(A6@A7)))))
-
-        #posição do efetuador em relação ao sistema de coordenadas global
-        p = A@p
+        p,orient = Cinematica_Direta3(self.p)
 
         #calculo do erro em módulo da orientacao desejada e da particula
-        self.o = distancia(orientacao(A),o2,3)
+        self.o = distancia(orientacao(orient),o2,3)
 
         #calculo da distancia euclidiana da posição do efetuador em relação ao objetivo
         self.d = distancia(p,o,3)
@@ -87,8 +72,10 @@ def PSO2(o,o2,number,n,L,erro_min,Kmax):
     
     #criando as particulas de dimensão n e calculando o valor de sua função de custo
     for i in range(number):
-        p = np.array([uniform(-L[0],L[0]),uniform(-L[1],L[1]),uniform(-L[2],L[2]),uniform(-L[3],L[3])\
-                      ,uniform(-L[4],L[4]),uniform(-L[5],L[5]),uniform(-L[6],L[6])])
+        p = []
+        for i2 in range(n):
+            p.append(uniform(-L[i2],L[i2]))
+
         q.append(particle(p,n))
         q[i].update_fuction(o,o2)
 
@@ -123,7 +110,7 @@ def PSO(posicaod,orientacaod,erro_min,Kmax):
 
     orientacaod = orientacao(orientacaod)
     numero_particulas = 200
-    dimensao = 7 #dimensão do robô
+    dimensao = getNumberJoints() #dimensão do robô
     #restrições de cada ângulo
     L = getLimits()
     return PSO2(posicaod,orientacaod,numero_particulas,dimensao,L,erro_min,Kmax)
