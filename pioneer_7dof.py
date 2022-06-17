@@ -77,6 +77,51 @@ def Cinematica_Direta(q):
                     ,p5_0[0:3,0],p6_0[0:3,0],p7_0[0:3,0],p8_0[0:3,0]]).T
     return pontos
 
+#Calcula as posições das juntas e seus eixos de atuação
+def Cinematica_Direta2(q):
+    #Pontos de interesse
+    p = np.array([[0,0,0,1]]).T #Base
+    p1_1 = np.array([[0,-0.05,0,1]]).T #junta1
+    p2_2 = p #junta2
+    p3_3 = np.array([[0,-0.075,0,1]]).T #junta3
+    p4_4 = p #junta4
+    p5_5 = np.array([[0,-0.0725,0,1]]).T #junta5
+    p6_6 = np.array([[-0.075,0,0,1]]).T #junta6
+    p7_7 = p #junta7
+
+    d,a,alpha,theta,p8_7 = getDH_paramaters(q)
+
+    #Calculando as matrizes homogêneas
+    A1 = matriz_homogenea(d[0],a[0],alpha[0],theta[0])
+    A2 = matriz_homogenea(d[1],a[1],alpha[1],theta[1])
+    A3 = matriz_homogenea(d[2],a[2],alpha[2],theta[2])
+    A4 = matriz_homogenea(d[3],a[3],alpha[3],theta[3])
+    A5 = matriz_homogenea(d[4],a[4],alpha[4],theta[4])
+    A6 = matriz_homogenea(d[5],a[5],alpha[5],theta[5])
+    A7 = matriz_homogenea(d[6],a[6],alpha[6],theta[6])
+
+    #Calculando os pontos de interesse no sistema Global
+    T1 = A1
+    T2 = T1@A2
+    T3 = T2@A3
+    T4 = T3@A4
+    T5 = T4@A5
+    T6 = T5@A6
+    T7 = T6@A7
+    p1_0 = T1@p1_1
+    p2_0 = T2@p2_2
+    p3_0 = T3@p3_3
+    p4_0 = T4@p4_4
+    p5_0 = T5@p5_5
+    p6_0 = T6@p6_6
+    p7_0 = T7@p7_7
+    p8_0 = T7@p8_7
+    pontos = np.array([p1_0[0:3,0],p2_0[0:3,0],p3_0[0:3,0],p4_0[0:3,0]\
+                    ,p5_0[0:3,0],p6_0[0:3,0],p7_0[0:3,0],p8_0[0:3,0]]).T
+    vetores = np.array([T1[0:3,1],T2[0:3,1],T3[0:3,1],T4[0:3,1],T5[0:3,1],T6[0:3,1]\
+                        ,T7[0:3,1]]).T
+    return [pontos,vetores]
+
 #Calcula a posição e a matriz de rotação do efetuador final
 def Cinematica_Direta3(q):
     #Pontos de interesse
@@ -256,3 +301,9 @@ def jacobianoGeometrico2(q):
     J[3:6,6] = z6_0[:,0]
 
     return J,p8_0,T7
+
+def getLengthElos():
+    return  np.array([0.05,0.075,0.075,0.0725,0.0725,0.075,0.075]) 
+
+def getTypeJoints():
+    return ['pivot','hinge','pivot','hinge','pivot','hinge','hinge']

@@ -130,6 +130,89 @@ def Cinematica_Direta(q):
                     ,p13_0[0:3,0],p14_0[0:3,0],p15_0[0:3,0],pn_0[0:3,0]]).T
     return pontos
 
+#Calcula as posições das juntas e seus eixos de atuação
+def Cinematica_Direta2(q):
+    #Pontos de interesse
+    p = np.array([[0,0,0,1]]).T #Base
+    p1_1 = np.array([[0,-0.05,0,1]]).T #junta1
+    p2_2 = p #junta2
+    p3_3 = np.array([[0,-0.075,0,1]]).T #junta3
+    p4_4 = p #junta4
+    p5_5 = np.array([[0,-0.075,0,1]]).T #junta5
+    p6_6 = p #junta6
+    p7_7 = np.array([[0,-0.075,0,1]]).T #junta7
+    p8_8 = p #junta8
+    p9_9 = np.array([[0,-0.075,0,1]]).T #junta9
+    p10_10 = p #junta10
+    p11_11 = np.array([[0,-0.075,0,1]]).T #junta11
+    p12_12 = p #junta12
+    p13_13 = np.array([[0,-0.075,0,1]]).T #junta13
+    p14_14 = np.array([[-0.075,0,0,1]]).T #junta 14
+    p15_15 = p #junta15
+
+    d,a,alpha,theta,pn_15 = getDH_paramaters(q)
+
+    #Calculando as matrizes homogêneas
+    A1 = matriz_homogenea(d[0],a[0],alpha[0],theta[0])
+    A2 = matriz_homogenea(d[1],a[1],alpha[1],theta[1])
+    A3 = matriz_homogenea(d[2],a[2],alpha[2],theta[2])
+    A4 = matriz_homogenea(d[3],a[3],alpha[3],theta[3])
+    A5 = matriz_homogenea(d[4],a[4],alpha[4],theta[4])
+    A6 = matriz_homogenea(d[5],a[5],alpha[5],theta[5])
+    A7 = matriz_homogenea(d[6],a[6],alpha[6],theta[6])
+    A8 = matriz_homogenea(d[7],a[7],alpha[7],theta[7])
+    A9 = matriz_homogenea(d[8],a[8],alpha[8],theta[8])
+    A10 = matriz_homogenea(d[9],a[9],alpha[9],theta[9])
+    A11 = matriz_homogenea(d[10],a[10],alpha[10],theta[10])
+    A12 = matriz_homogenea(d[11],a[11],alpha[11],theta[11])
+    A13 = matriz_homogenea(d[12],a[12],alpha[12],theta[12])
+    A14 = matriz_homogenea(d[13],a[13],alpha[13],theta[13])
+    A15 = matriz_homogenea(d[14],a[14],alpha[14],theta[14])
+
+    #Calculando os pontos de interesse no sistema Global
+    T1 = A1
+    T2 = T1@A2
+    T3 = T2@A3
+    T4 = T3@A4
+    T5 = T4@A5
+    T6 = T5@A6
+    T7 = T6@A7
+    T8 = T7@A8
+    T9 = T8@A9
+    T10 = T9@A10
+    T11 = T10@A11
+    T12 = T11@A12
+    T13 = T12@A13
+    T14 = T13@A14
+    T15 = T14@A15
+
+    p1_0 = T1@p1_1
+    p2_0 = T2@p2_2
+    p3_0 = T3@p3_3
+    p4_0 = T4@p4_4
+    p5_0 = T5@p5_5
+    p6_0 = T6@p6_6
+    p7_0 = T7@p7_7
+    p8_0 = T8@p8_8
+    p9_0 = T9@p9_9
+    p10_0 = T10@p10_10
+    p11_0 = T11@p11_11
+    p12_0 = T12@p12_12
+    p13_0 = T13@p13_13
+    p14_0 = T14@p14_14
+    p15_0 = T15@p15_15
+    pn_0 = T15@pn_15
+
+    pontos = np.array([p1_0[0:3,0],p2_0[0:3,0],p3_0[0:3,0],p4_0[0:3,0]\
+                    ,p5_0[0:3,0],p6_0[0:3,0],p7_0[0:3,0],p8_0[0:3,0]
+                    ,p9_0[0:3,0],p10_0[0:3,0],p11_0[0:3,0],p12_0[0:3,0]
+                    ,p13_0[0:3,0],p14_0[0:3,0],p15_0[0:3,0],pn_0[0:3,0]]).T
+
+    vetores = np.array([T1[0:3,1],T2[0:3,1],T3[0:3,1],T4[0:3,1],T5[0:3,1],T6[0:3,1]\
+                        ,T7[0:3,1],T8[0:3,1],T9[0:3,1],T10[0:3,1],T11[0:3,1],T12[0:3,1]\
+                        ,T13[0:3,1],T14[0:3,1],T15[0:3,1]]).T
+    return [pontos,vetores]
+
 #Calcula a posição e a matriz de rotação do efetuador final
 def Cinematica_Direta3(q):
     #Pontos de interesse
@@ -436,3 +519,13 @@ def jacobianoGeometrico2(q):
 
 
     return J,p16_0,T15
+
+def getLengthElos():
+    return  np.array([0.05,0.075,0.075,0.075,0.075,0.075,
+            0.075,0.075,0.075,0.075,0.075,0.075,0.075,
+            0.075,0.075]) 
+
+def getTypeJoints():
+    return ['pivot','hinge','pivot','hinge','pivot',
+            'hinge','pivot','hinge','pivot','hinge','pivot',
+            'hinge','pivot','hinge','hinge']
