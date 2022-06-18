@@ -22,7 +22,7 @@ else:
     sys.path.append(diretorio_atual + '/Metodos')
 
 #import dos métodos
-from manipulador_15dof import *
+from pioneer_7dof import *
 from DLS_Completo import DLS_Completo
 from DLS_WLS_Completo import DLS_WLS_Completo
 from GradDesc_Completo import GradDesc_Completo
