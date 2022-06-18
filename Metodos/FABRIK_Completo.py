@@ -7,13 +7,15 @@
 #PIB10456-2021 - Soluções de cinemática inversa de robôs manipuladores seriais com restrições físicas
 #Durante o período: PIBIC 2021/2022 (01/09/2021 a 31/08/2022).
 
+#Import de bibliotecas do python
 from math import pi,acos
 import numpy as np
 
-#Import do modulo funcoes.py
+#Import das minhas funções
 from funcoes import norm, distancia, S ,rotationar_vetor, projecao_ponto_plano ,orientacao
 
-from manipulador_15dof import *
+#Import das funções associadas ao manipulador usado
+from pioneer_7dof import *
 
 #criar um vetor coluna a partir de uma lista
 def vetor(v):   
@@ -147,19 +149,19 @@ def FABRIK_Completo(posicaod,orientd,q,erro_min,Kmax):
     while(erro > erromin and k < K):
         #Forward
         for i in range(n-1,0,-1):
-            if(i == n-1): #Se for a junta 7    
+            if(i == n-1): #Se for a última junta
                 pl[:,i+1] = destino[:,0]#coloca o efetuador no destino          
                 Dl[:,i] = orientd[:,1]
                 pl[:,i] = pl[:,i+1] - orientd[:,2]*b[i]
                 
 
-            elif(joint[i] ==  'hinge'): #Se atual for junta Hinge (2,4 e 6)
+            elif(joint[i] ==  'hinge'): #Se atual for junta Hinge
 
-                if(joint[i+1] ==  'pivot'):#Se a junta prev for pivot (2 e 4)
+                if(joint[i+1] ==  'pivot'):#Se a junta prev for pivot
                     pl[:,i] = pl[:,i+1] - Dl[:,i+1]*b[i]
                     #paux é pl é o ponto da próxima iteração
                     #eu calculo ele aqui porque como proposto na abordagem FABRIK-R
-                    #Dl(:,i) é cálculo de forma que pl(:,i+1) seja alcancável
+                    #Dl(:,i) é cálculado de forma que pl(:,i+1) seja alcancável
                     paux = iteracao_Fabrik(p[:,i-1],pl[:,i],b[i],Dl[:,i+1])[:,0]
                     paux = restringe_junta(paux,pl[0:3,i],pl[0:3,i+1],i+1)
                     v1 = vetor(paux - pl[:,i])                
@@ -176,7 +178,7 @@ def FABRIK_Completo(posicaod,orientd,q,erro_min,Kmax):
                     Dl[:,i] = rotationar_vetor(v2,vetor(Dl[:,i+1]),(pi/2) - th)[:,0] 
                     Dl[:,i] = Dl[:,i]/norm(D[:,i])
 
-                else: #Se a junta prev for hinge (6)
+                else: #Se a junta prev for hinge
                     pl[:,i] = iteracao_Fabrik(p[:,i-1],pl[:,i+1],b[i],Dl[:,i+1])[:,0]
                     pl[:,i] = restringe_junta(pl[0:3,i],pl[0:3,i+1],pl[0:3,i+2],i+1)
                     v1 = vetor(pl[:,i] - pl[:,i+1])
@@ -184,7 +186,7 @@ def FABRIK_Completo(posicaod,orientd,q,erro_min,Kmax):
                     Dl[:,i] = rotationar_vetor(vetor(Dl[:,i+1]),v1,pi/2)[:,0] 
                     Dl[:,i] = Dl[:,i]/norm(D[:,i])
                     
-            elif(joint[i] ==  'pivot'): #Se a junta for pivot (3 e 5)
+            elif(joint[i] ==  'pivot'): #Se a junta for pivot
                 pl[:,i] = iteracao_Fabrik(p[:,i-1],pl[:,i+1],b[i],Dl[:,i+1])[:,0]
                 pl[:,i] = restringe_junta(pl[0:3,i],pl[0:3,i+1],pl[0:3,i+2],i+1)
                 v1 = pl[:,i] - pl[:,i+1]
@@ -201,7 +203,7 @@ def FABRIK_Completo(posicaod,orientd,q,erro_min,Kmax):
         #Backward
         for i in range(0,n):
             if(joint[i] ==  'hinge'): #Se for junta Hinge
-                if(joint[i-1] ==  'pivot'):#Se a junta prev for pivot (2,4 e 6)
+                if(joint[i-1] ==  'pivot'):#Se a junta prev for pivot
                     pl[:,i] = pl[:,i-1] + Dl[:,i-1]*b[i-1]
                     paux = iteracao_Fabrik(p[:,i+1],pl[:,i],b[i],Dl[:,i-1])[:,0]
                     v1 = vetor(paux - pl[:,i])
@@ -220,9 +222,9 @@ def FABRIK_Completo(posicaod,orientd,q,erro_min,Kmax):
 
                     Dl[:,i] = rotationar_vetor(v2,vetor(Dl[:,i-1]),(pi/2) - th)[:,0] 
                     Dl[:,i] = Dl[:,i]/norm(D[:,i])
-                    if(i != 1): Dl[:,i]  = restringe_junta2(vetor(Dl[:,i]),vetor(Dl[:,i-2]),i-1) #1-3-5
+                    if(i != 1): Dl[:,i]  = restringe_junta2(vetor(Dl[:,i]),vetor(Dl[:,i-2]),i-1)
                     else: Dl[:,i]  = restringe_junta2(vetor(Dl[:,i]),vetor([1,0,0]),i-1)
-                else: #Se a junta prev for Hinge (7)
+                else: #Se a junta prev for Hinge
                     pl[:,i] = iteracao_Fabrik(p[:,i+1],pl[:,i-1],b[i-1],Dl[:,i-1])[:,0]
                     pl[:,i] = restringe_junta(pl[:,i],pl[0:3,i-1],pl[0:3,i-2],i-1)
                     paux = iteracao_Fabrik(p[:,i+1],pl[:,i],b[i],Dl[:,i-1])[:,0]
@@ -237,7 +239,7 @@ def FABRIK_Completo(posicaod,orientd,q,erro_min,Kmax):
             elif(i == 0): #Primeira junta eixo de atuação e posição são fixos
                 pl[:,0] = pcte #[0,0,0.075]
 
-            elif(joint[i] ==  'pivot'): #Se a junta for pivot (3 e 5)
+            elif(joint[i] ==  'pivot'): #Se a junta for pivot 
                 pl[:,i] = iteracao_Fabrik(p[:,i+1],pl[:,i-1],b[i-1],Dl[:,i-1])[:,0]
                 pl[:,i] = restringe_junta(pl[0:3,i],pl[0:3,i-1],pl[0:3,i-2],i-1)
                 v1 = pl[:,i] - pl[:,i-1]

@@ -53,7 +53,7 @@ for i in range(repeticoes):
 
     [posicaod,orientacaod] = random_pose()
 
-    [erro,k] = FRPSO(posicaod,orientacaod,erro_min,Kmax)
+    [erro,k] = FRPSO('pioneer_7dof',posicaod,orientacaod,erro_min,Kmax)
     if(erro < erro_min):
         kk.append(k)
 

@@ -14,8 +14,9 @@ import numpy as np
 #Import das minhaa funções criadas 
 from funcoes import distancia, matriz_homogenea_final
 from funcoes import projecao_ponto_plano, rotationar_vetor
-#from pioneer_7dof import *
-from manipulador_15dof import *
+
+#Import das funções associada ao manipulador usado
+from pioneer_7dof import *
 
 #Calcula o acos de um angulo arrendondado em 10 casas decimais
 def acosr(x):
@@ -29,11 +30,13 @@ def norm(v):
 def vetor(v):  
     return np.array([[v[0],v[1],v[2]]]).T
 
-
-def CCD(posicaod,q,erro_min,Kmax,Solucao = False):
- 
-    qlim = getLimits() #valor maximo que a junta pode assumir
-    n = getNumberJoints() #número de juntas
+#Método
+def CCD(posicaod,q,erro_min,Kmax):
+    #valor maximo que a junta pode assumir
+    qlim = getLimits() 
+    #número de juntas
+    n = getNumberJoints() 
+    #Lista lógica de quais juntas possui o alpha de DH negativo
     alphasNegatives = getAlphasNegatives()
 
     for k in range(Kmax):
@@ -75,8 +78,6 @@ def CCD(posicaod,q,erro_min,Kmax,Solucao = False):
 
         if(erro < erro_min):
             break
-
-    if(Solucao):
-        return [erro,k+1,pontos[:,n]]        
+      
     return [erro,k+1]
 

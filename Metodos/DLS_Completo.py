@@ -12,8 +12,10 @@
 #Import das bibliotecas
 import numpy as np
 
+#Import da minhas funções
 from funcoes import distancia, S, orientacao
-from manipulador_15dof import *
+#Import das funções associadas ao manipulador utilizado
+from pioneer_7dof import *
 
 def DLS_Completo(posicaod,orientacaod,q,erro_min,Kmax):
     #variaveis do método    

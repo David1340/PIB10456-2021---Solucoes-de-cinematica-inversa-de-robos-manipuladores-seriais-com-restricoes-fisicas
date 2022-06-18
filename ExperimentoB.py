@@ -8,11 +8,12 @@
 
 #Import das bibliotecas
 import numpy as np
-import random 
+from random import uniform
 import sys
 import os
 import platform
-#Import diretorio e funções
+
+#Import do diretorio 
 diretorio_atual = os.getcwd()
 sys.path.append(diretorio_atual)
 if(platform.system == 'Windows'):
@@ -20,8 +21,8 @@ if(platform.system == 'Windows'):
 else:
     sys.path.append(diretorio_atual + '/Metodos')
 
-from funcoes import random_pose
-from pioneer_7dof import getLimits
+#import dos métodos
+from manipulador_15dof import *
 from DLS_Completo import DLS_Completo
 from DLS_WLS_Completo import DLS_WLS_Completo
 from GradDesc_Completo import GradDesc_Completo
@@ -29,12 +30,15 @@ from PSO import PSO
 from FRPSO import FRPSO
 from FABRIK_Completo import FABRIK_Completo
 
-#valor maximo que a junta pode assumir
+#parâmetros do manipulador
 qlim = getLimits()
+n = getNumberJoints()
+q = np.zeros([n,1])
 
+#Configuração do experimento
 Kmax = 1000
 erro_min = 0.001
-repeticoes = 10
+repeticoes = 1000
 
 kDLS = []
 kDLS_WLS = []
@@ -44,13 +48,13 @@ kFRPSO = []
 kFABRIK = []
 tc = [0,0,0,0,0,0]
 mi = tc.copy()
-q = np.zeros([7,1])
+
 
 for i in range(repeticoes):
     print('i:',i)
-    #Gerando a cofiguração inicial
+    #Gerando a configuração inicial
     for i2 in range(np.size(q)):
-        q[i2] = random.uniform(-qlim[i2],qlim[i2])
+        q[i2] = uniform(-qlim[i2],qlim[i2])
     
     [posicaod,orientacaod] = random_pose()
 
@@ -97,7 +101,7 @@ print(np.round(mi,2))
 metodos = ["DLS","DLS_WLS","GradDesc","PSO-P","FRPSO","FABRIK"]
 arquivo = open("ExperimentoB2.txt", "w")
 arquivo.write("Metodos: " + str(metodos) + "\n")
-arquivo.write("tc: " + str(tc) + "\n")
+arquivo.write("tc: " + str(np.round(tc,2)) + "\n")
 arquivo.write("mi: " + str(np.round(mi,2))+ "\n")
 arquivo.write("Kmax: " + str(Kmax))
 arquivo.close()

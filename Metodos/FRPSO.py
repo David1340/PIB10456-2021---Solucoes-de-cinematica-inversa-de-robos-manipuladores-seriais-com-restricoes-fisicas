@@ -14,9 +14,10 @@ from random import uniform
 from math import exp
 import numpy as np
 
-#Import do modulo funcoes.py
+#Import das minhas funções
 from funcoes import distancia, orientacao
-from manipulador_15dof import *
+#Import das funções associadas ao manipulador usado
+from pioneer_7dof import *
 
 class particle:
     def __init__(self,position,dimension):
@@ -40,7 +41,7 @@ class particle:
         self.d = distancia(p,o,3)
 
         #Calculo da função de custo       
-        k1 = 0 #orientacao
+        k1 = 0.1 #orientacao
         k2 = 1 #posição
         self.f = (k1*self.o) + (k2*self.d)
         if(self.f < self.bf):

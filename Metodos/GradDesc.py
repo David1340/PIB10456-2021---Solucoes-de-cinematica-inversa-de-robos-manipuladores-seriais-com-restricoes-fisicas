@@ -12,10 +12,10 @@
 #Import das bibliotecas python
 import numpy as np
 
-
-#Import do modulo funcoes.py
+#Import das minhas funções
 from funcoes import distancia
-from manipulador_15dof import *
+#Import das funções associadas ao manipulador usado
+from pioneer_7dof import *
 
 def GradDesc(posicaod,q,erro_min,Kmax):
 

@@ -12,8 +12,10 @@
 #Import das bibliotecas python
 import numpy as np
 
+#Import das minhas funções
 from funcoes import distancia
-from manipulador_15dof import *
+#Import das funções associadas a manipulador usado
+from pioneer_7dof import *
 
 def DLS_WLS(posicaod,q,erro_min,Kmax):
     #variaveis do método
@@ -31,10 +33,6 @@ def DLS_WLS(posicaod,q,erro_min,Kmax):
     qlim = getLimits()
     thmax = np.array(qlim)
     thmin = -thmax
-
-    #vetores colunas do sistema de coordenadas global
-    z = np.array([[0,0,1,1]]).T
-    o = np.array([[0,0,0,1]]).T #origem
 
     for k in range(K):
         
