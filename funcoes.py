@@ -298,4 +298,17 @@ def matriz_homogenea_final(d,a,alpha,theta,metodo = None):
         
         return Tn
 
-
+def deteccao_de_colisao(pr1,pr2,p,raio):
+    v = pr2 - pr1
+    u = p - pr1
+    #Seja w a projeção de u em v então w = k*v
+    #em que w = dot(u,v)/norm(v)^2
+    k = np.dot(u,v)/np.sum(np.square(v))
+    if(k > 1 or k < 0): #Se a projeção de p não está no segmento de reta pr1->pr2
+        return 0
+    #d = |u x v|/|v|^2 distância entre ponto e reta
+    d = np.sqrt(np.sum(np.square(np.cross(u,v))))/np.sum(np.square(v))
+    if(d <= raio):
+        return 1
+    else:
+        return 0
