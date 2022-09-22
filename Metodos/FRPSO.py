@@ -32,6 +32,12 @@ class particle:
                    
     def update_fuction(self,o,o2): #Calcula a função de custo/fitness da particula
         #(posição,orientacao) da pose desejada
+        limits = getLimits()
+        for (qi,li) in zip(self.p, limits):
+            if(np.abs(qi) > np.abs(li)):
+                self.f = np.Inf
+                return 
+
         p,orient = Cinematica_Direta3(self.p)
 
         #calculo do erro em módulo da orientacao desejada e da particula
@@ -53,7 +59,7 @@ def FRPSO2(o,o2,number,n,L,erro_min,Kmax):
     k = Kmax     
     q = []
     Nbests = 5
-    tau = 20
+    tau = 0.5
 
     #criando as particulas de dimensão n e calculando o valor de sua função de custo
     for i in range(number):
@@ -87,10 +93,12 @@ def FRPSO2(o,o2,number,n,L,erro_min,Kmax):
     for j in range(k):
         q = []
 
-        sig = np.sqrt(1 - 0.9999 * exp(-f/tau))
+        sig = np.sqrt(1 - exp(-f/tau))
+        #sig = f/tau
         for N in range(Nbests):
             for i in range(int(number/(Nbests +1))):
                 p = sig*np.random.randn(n)
+                #p = -2*sig*np.random.random(n) + sig
                 for i2 in range(n):
                     p[i2] = qbests[N][i2] + p[i2]
                 q.append(particle(p,n))
@@ -117,8 +125,6 @@ def FRPSO2(o,o2,number,n,L,erro_min,Kmax):
             break;   
 
     return [f,j+1]
-
-
 
 def FRPSO(posicaod,orientacaod,erro_min,Kmax):
 
