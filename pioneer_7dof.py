@@ -350,7 +350,11 @@ def plot_junta_revolucao(A,p,c,ax,h,r,cor = 'blue', offset = 0):
         ax.plot_surface(x, y, z,color = cor, alpha = 1)
 
 #Função que plota o manipulador, quando recebe os pontos de interesse
-def plot(q,t,ax,fig):
+def plot(q,t):
+    plt.ion()
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection = '3d')
+
     #Pontos de interesse
     p = np.array([[0,0,0,1]]).T #Base
     p1_1 = np.array([[0,-0.05,0,1]]).T #junta1
