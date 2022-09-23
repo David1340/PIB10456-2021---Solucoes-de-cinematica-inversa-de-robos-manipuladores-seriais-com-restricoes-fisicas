@@ -59,7 +59,7 @@ def FRPSO2(o,o2,number,n,L,erro_min,Kmax):
     k = Kmax     
     q = []
     Nbests = 5
-    tau = 0.5
+    tau = 20
 
     #criando as particulas de dimensão n e calculando o valor de sua função de custo
     for i in range(number):
@@ -118,13 +118,14 @@ def FRPSO2(o,o2,number,n,L,erro_min,Kmax):
                         qvalues[i2] = q[i].f
                         qbests[i2] = q[i].p.copy()
                         break
-                f = min(qvalues)   
+                f = min(qvalues)
+                qBest = qbests[np.argmin(qvalues)]   
         #Atualiza a configuração do robô no Rviz
         #Critério de parada
         if(f <= erro_min):
             break;   
 
-    return [f,j+1]
+    return [f,j+1,qBest]
 
 def FRPSO(posicaod,orientacaod,erro_min,Kmax):
 
@@ -133,4 +134,8 @@ def FRPSO(posicaod,orientacaod,erro_min,Kmax):
     dimensao = getNumberJoints() #dimensão do robô
     #restrições de cada ângulo
     L = getLimits()
-    return FRPSO2(posicaod,orientacaod,numero_particulas,dimensao,L,erro_min,Kmax)
+
+    f,k,qBest = FRPSO2(posicaod,orientacaod,numero_particulas,dimensao,L,erro_min,Kmax)
+    #plot(qBest,posicaod)
+
+    return [f,k]
