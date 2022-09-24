@@ -18,9 +18,9 @@ from funcoes import Esfera
 diretorio_atual = os.getcwd()
 sys.path.append(diretorio_atual)
 if(platform.system == 'Windows'):
-    sys.path.append(diretorio_atual + '\Metodos')
+    sys.path.append(diretorio_atual + '\Metodos2')
 else:
-    sys.path.append(diretorio_atual + '/Metodos')
+    sys.path.append(diretorio_atual + '/Metodos2')
 
 #Import dos métodos
 from FRPSO import FRPSO
@@ -43,17 +43,17 @@ mi = tc.copy()
 
 #obstáculos
 esferas = []
-esferas.append(Esfera(0.1,0.1,0.3,0.05))
-esferas.append(Esfera(-0.1,-0.1,0.3,0.05))
-esferas.append(Esfera(-0.1,0.1,0.3,0.05))
-esferas.append(Esfera(0.1,-0.1,0.3,0.05))
+a = 0.1
+esferas.append(Esfera(a,a,0.3,0.05))
+esferas.append(Esfera(-a,-a,0.3,0.05))
+esferas.append(Esfera(-a,a,0.3,0.05))
+esferas.append(Esfera(a,-a,0.3,0.05))
 
-esferas.append(Esfera(0.1,0.1,0.1,0.05))
-esferas.append(Esfera(-0.1,-0.1,0.1,0.05))
-esferas.append(Esfera(-0.1,0.1,0.1,0.05))
-esferas.append(Esfera(0.1,-0.1,0.1,0.05))
+esferas.append(Esfera(a,a,0.1,0.05))
+esferas.append(Esfera(-a,-a,0.1,0.05))
+esferas.append(Esfera(-a,a,0.1,0.05))
+esferas.append(Esfera(a,-a,0.1,0.05))
 
-esferas = []
 for i in range(repeticoes):
     print('i:',i)
 
@@ -61,12 +61,12 @@ for i in range(repeticoes):
     for i2 in range(np.size(q)):
         q[i2] = uniform(-qlim[i2],qlim[i2])
 
-    [posicaod,orientacaod] = random_pose()
+    [posicaod,orientacaod] = random_pose(esferas)
     
     #posicaod = np.array([[0.15,0.15,0.3]]).T
 
-    #[erro,k] = FRPSO(posicaod,orientacaod,erro_min,Kmax,esferas)
-    [erro,k] = FRPSO(posicaod,orientacaod,erro_min,Kmax)
+    [erro,k] = FRPSO(posicaod,orientacaod,erro_min,Kmax,esferas)
+    #[erro,k] = FRPSO(posicaod,orientacaod,erro_min,Kmax)
     if(erro < erro_min):
         kFRPSO.append(k)
 
