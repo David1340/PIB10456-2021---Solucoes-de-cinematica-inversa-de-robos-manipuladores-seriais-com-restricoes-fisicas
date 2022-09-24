@@ -127,13 +127,19 @@ def deteccao_de_colisao(pr1,pr2,p,raio):
     #em que w = dot(u,v)/norm(v)^2
     k = np.dot(u,v)/np.sum(np.square(v))
     if(k > 1 or k < 0): #Se a projeção de p não está no segmento de reta pr1->pr2
-        return 0
+        if(np.sqrt(np.sum((pr1 - p)**2)) <= raio):
+            return True
+
+        if(np.sqrt(np.sum((pr2 - p)**2)) <= raio):
+            return True
+
+        return False
     #d = |u x v|/|v|^2 distância entre ponto e reta
     d = np.sqrt(np.sum(np.square(np.cross(u,v))))/np.sum(np.square(v))
     if(d <= raio):
-        return 1
+        return True
     else:
-        return 0
+        return False
 
 class Esfera:
     def __init__(self,x,y,z,r):
