@@ -135,5 +135,16 @@ def deteccao_de_colisao(pr1,pr2,p,raio):
     else:
         return 0
 
+class Esfera:
+    def __init__(self,x,y,z,r):
+        self.x = x
+        self.y = y
+        self.z = z
+        self.r = r
+    def get_centro(self):
+        return np.array([self.x,self.y,self.z])
+    def get_raio(self):
+        return self.r
+
 
 
