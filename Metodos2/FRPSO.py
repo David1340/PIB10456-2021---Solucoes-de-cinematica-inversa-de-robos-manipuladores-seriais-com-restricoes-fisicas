@@ -43,7 +43,6 @@ class particle:
         end = np.shape(pontos)[1] -1
 
         for esfera in esferas:
-            print('a')
             for i in range(end):
                 r = esfera.get_raio() + getRaio()
                 if(deteccao_de_colisao(pontos[:,i],pontos[:,i+1],esfera.get_centro(),r)):
@@ -148,7 +147,6 @@ def FRPSO(posicaod,orientacaod,erro_min,Kmax,esferas):
     L = getLimits()
 
     f,k,qBest = FRPSO2(posicaod,orientacaod,numero_particulas,dimensao,L,erro_min,Kmax,esferas)
-    
     #plot(qBest,posicaod,esferas)
 
     return [f,k]
