@@ -8,7 +8,7 @@
 
 from  math import pi
 import numpy as np
-from funcoes import matriz_homogenea,S,Esfera
+from funcoes import matriz_homogenea,S,Esfera,deteccao_de_colisao
 from random import uniform
 import matplotlib.pyplot as plt
 
@@ -156,15 +156,28 @@ def Cinematica_Direta3(q):
     return [p8_0[0:3] ,T7[0:3,0:3]]
 
 #Gera uma pose alcançável posição + matriz de rotação
-def random_pose(): 
+def random_pose(esferas): 
     #valor maximo que a junta pode assumir
     qlim = getLimits() 
     n = getNumberJoints()
     #angulos de juntas iniciais
-    q = np.zeros([n,1])
-    for a in range(np.size(q)):
-        q[a] = uniform(-qlim[a],qlim[a])
+    colidiu = True
+    while(colidiu):
+        colidiu = False
 
+        q = np.zeros([n,1])
+        for a in range(np.size(q)):
+            q[a] = uniform(-qlim[a],qlim[a])
+
+        pontos = Cinematica_Direta(q)
+        end = np.shape(pontos)[1] -1
+
+        for esfera in esferas:
+            for i in range(end):
+                r = esfera.get_raio() + getRaio()
+                if(deteccao_de_colisao(pontos[:,i],pontos[:,i+1],esfera.get_centro(),r)):
+                    colidiu = True
+                    break
     return Cinematica_Direta3(q)
 
 #Calcula o jacobiano considerando apenas a posição
@@ -448,7 +461,7 @@ def plot(q,t,esferas):
     ax.set_ylim3d(-0.5,0.5)
     ax.set_zlim3d(0,1)
     fig.canvas.draw() #mostra o plot
-    plt.pause(15)
+    plt.pause(1)
 
 def plot_esfera(esfera: Esfera,ax):
     x0 = esfera.x
