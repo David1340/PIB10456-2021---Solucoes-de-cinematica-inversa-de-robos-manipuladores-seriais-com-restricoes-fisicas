@@ -44,15 +44,22 @@ mi = tc.copy()
 #obstáculos
 esferas = []
 a = 0.1
-esferas.append(Esfera(a,a,0.3,0.05))
-esferas.append(Esfera(-a,-a,0.3,0.05))
-esferas.append(Esfera(-a,a,0.3,0.05))
-esferas.append(Esfera(a,-a,0.3,0.05))
+r = 0.025
+esferas.append(Esfera(a,a,0.3,r))
+esferas.append(Esfera(-a,-a,0.3,r))
+esferas.append(Esfera(-a,a,0.3,r))   
+esferas.append(Esfera(a,-a,0.3,r))
 
-esferas.append(Esfera(a,a,0.1,0.05))
-esferas.append(Esfera(-a,-a,0.1,0.05))
-esferas.append(Esfera(-a,a,0.1,0.05))
-esferas.append(Esfera(a,-a,0.1,0.05))
+esferas.append(Esfera(a,a,0.1,r))
+esferas.append(Esfera(-a,-a,0.1,r))
+esferas.append(Esfera(-a,a,0.1,r))
+esferas.append(Esfera(a,-a,0.1,r))
+
+
+esferas.append(Esfera(a,0,0.2,r))
+esferas.append(Esfera(-a,0,0.2,r))
+esferas.append(Esfera(0,a,0.2,r))
+esferas.append(Esfera(0,-a,0.2,r))
 
 for i in range(repeticoes):
     print('i:',i)
@@ -64,7 +71,7 @@ for i in range(repeticoes):
     [posicaod,orientacaod] = random_pose(esferas)
     
     #posicaod = np.array([[0.15,0.15,0.3]]).T
-
+    
     [erro,k] = FRPSO(posicaod,orientacaod,erro_min,Kmax,esferas)
     #[erro,k] = FRPSO(posicaod,orientacaod,erro_min,Kmax)
     if(erro < erro_min):
