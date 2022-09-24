@@ -8,7 +8,7 @@
 
 from  math import pi
 import numpy as np
-from funcoes import matriz_homogenea,S
+from funcoes import matriz_homogenea,S,Esfera
 from random import uniform
 import matplotlib.pyplot as plt
 
@@ -24,6 +24,9 @@ def getDH_paramaters(q):
     p_n = np.array([[0,0,L,1]]).T 
     return d,a,alpha,theta,p_n.copy()
 
+def getRaio():
+    return 0.025
+
 def getLimits():
     qlim = [2.6179,1.5358,2.6179,1.6144,2.6179,1.8413,1.7889]
     return qlim
@@ -36,7 +39,7 @@ def getAlphasNegatives():
     return [False,True,False,True,False,False,False] 
 
 #Calcula a posição das juntas a partir da configuração q
-def Cinematica_Direta(q):
+def Cinematica_Direta(q,orientacao = False):
     #Pontos de interesse
     p = np.array([[0,0,0,1]]).T #Base
     p1_1 = np.array([[0,-0.05,0,1]]).T #junta1
@@ -76,6 +79,10 @@ def Cinematica_Direta(q):
     p8_0 = T7@p8_7
     pontos = np.array([p1_0[0:3,0],p2_0[0:3,0],p3_0[0:3,0],p4_0[0:3,0]\
                     ,p5_0[0:3,0],p6_0[0:3,0],p7_0[0:3,0],p8_0[0:3,0]]).T
+    
+    if(orientacao):
+        return pontos,T7[0:3,0:3]
+    
     return pontos
 
 #Calcula as posições das juntas e seus eixos de atuação
@@ -350,7 +357,7 @@ def plot_junta_revolucao(A,p,c,ax,h,r,cor = 'blue', offset = 0):
         ax.plot_surface(x, y, z,color = cor, alpha = 1)
 
 #Função que plota o manipulador, quando recebe os pontos de interesse
-def plot(q,t):
+def plot(q,t,esferas):
     plt.ion()
     fig = plt.figure()
     ax = fig.add_subplot(111, projection = '3d')
@@ -399,14 +406,6 @@ def plot(q,t):
     T5 = T4@A5
     T6 = T5@A6
     T7 = T6@A7
-    p1_0 = T1@p1_1
-    p2_0 = T2@p2_2
-    p3_0 = T3@p3_3
-    p4_0 = T4@p4_4
-    p5_0 = T5@p5_5
-    p6_0 = T6@p6_6
-    p7_0 = T7@p7_7
-    p8_0 = T7@p8_7
     e1_0 = T7@e1_7
     e2_0 = T7@e2_7
     e3_0 = T7@e3_7
@@ -418,23 +417,26 @@ def plot(q,t):
     #Plotando efetuador
     plt.plot([e1_0[0,0],e2_0[0,0],e3_0[0,0],e4_0[0,0],e3_0[0,0]]\
              ,[e1_0[1,0],e2_0[1,0],e3_0[1,0],e4_0[1,0],e3_0[1,0]]\
-             ,[e1_0[2,0],e2_0[2,0],e3_0[2,0],e4_0[2,0],e3_0[2,0]],'blue')
+             ,[e1_0[2,0],e2_0[2,0],e3_0[2,0],e4_0[2,0],e3_0[2,0]],'green')
     
     #Plotando objetivo    
     ax.scatter(t[0,0],t[1,0],t[2,0],color = 'red')
     
     #Plotando Juntas e base   
- 
-    plot_junta_revolucao(np.eye(4),p,'z',ax,0.025,0.025,'blue')
-    plot_junta_revolucao(T1,p1_1,'y',ax,0.05,0.025,'green',-0.025*0.5)
-    plot_junta_revolucao(T2,p2_2,'y',ax,0.025,0.025,'blue')
-    plot_junta_revolucao(T3,p3_3,'y',ax,0.05,0.025,'green')
-    plot_junta_revolucao(T4,p4_4,'y',ax,0.025,0.025,'blue')
-    plot_junta_revolucao(T5,p5_5,'y',ax,0.05,0.025,'green')
-    plot_junta_revolucao(T6,p6_6,'y',ax,0.025,0.025,'blue')
-    plot_junta_revolucao(T6,p6_6,'x',ax,0.5*0.025,0.025,'blue',1.5*0.025)
-    plot_junta_revolucao(T7,p7_7,'y',ax,0.025,0.025,'green')
-    plot_junta_revolucao(T7,p7_7,'z',ax,0.04,0.025,'green',0.025)
+    r = getRaio()
+    plot_junta_revolucao(np.eye(4),p,'z',ax,0.025,r,'green')
+    plot_junta_revolucao(T1,p1_1,'y',ax,0.05,r,'green',-0.025*0.5)
+    plot_junta_revolucao(T2,p2_2,'y',ax,0.025,r,'green')
+    plot_junta_revolucao(T3,p3_3,'y',ax,0.05,r,'green')
+    plot_junta_revolucao(T4,p4_4,'y',ax,0.025,r,'green')
+    plot_junta_revolucao(T5,p5_5,'y',ax,0.05,r,'green')
+    plot_junta_revolucao(T6,p6_6,'y',ax,0.025,r,'green')
+    plot_junta_revolucao(T6,p6_6,'x',ax,0.5*0.025,r,'green',1.5*0.025)
+    plot_junta_revolucao(T7,p7_7,'y',ax,0.025,r,'green')
+    plot_junta_revolucao(T7,p7_7,'z',ax,0.04,r,'green',0.025)
+
+    for esfera in esferas:
+        plot_esfera(esfera,ax)
 
     ax.set_xlabel('Eixo x(m)')
     ax.set_ylabel('Eixo y(m)')
@@ -444,6 +446,20 @@ def plot(q,t):
     plt.title('Pioneer 7DOF')
     ax.set_xlim3d(-0.5,0.5)
     ax.set_ylim3d(-0.5,0.5)
-    ax.set_zlim3d(0,0.5)
+    ax.set_zlim3d(0,1)
     fig.canvas.draw() #mostra o plot
-    plt.pause(200)
+    plt.pause(15)
+
+def plot_esfera(esfera: Esfera,ax):
+    x0 = esfera.x
+    y0 = esfera.y
+    z0 = esfera.z
+    r = esfera.r
+
+    u = np.linspace(0,2*np.pi,10)
+    v = np.linspace(0,2*np.pi,10)
+    u,v = np.meshgrid(u,v)
+    x = r*np.cos(u)*np.cos(v) + x0
+    y = r*np.cos(u)*np.sin(v) + y0
+    z = r*np.sin(u) + z0
+    ax.plot_surface(x,y,z,color = 'blue', alpha = 1)
