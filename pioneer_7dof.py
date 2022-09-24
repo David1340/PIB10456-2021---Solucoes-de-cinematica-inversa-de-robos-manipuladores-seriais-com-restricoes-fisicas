@@ -160,12 +160,12 @@ def random_pose(esferas):
     #valor maximo que a junta pode assumir
     qlim = getLimits() 
     n = getNumberJoints()
-    #angulos de juntas iniciais
+    q = np.zeros([n,1])
+
     colidiu = True
     while(colidiu):
         colidiu = False
-
-        q = np.zeros([n,1])
+        
         for a in range(np.size(q)):
             q[a] = uniform(-qlim[a],qlim[a])
 
@@ -461,7 +461,7 @@ def plot(q,t,esferas):
     ax.set_ylim3d(-0.5,0.5)
     ax.set_zlim3d(0,1)
     fig.canvas.draw() #mostra o plot
-    plt.pause(1)
+    plt.pause(300)
 
 def plot_esfera(esfera: Esfera,ax):
     x0 = esfera.x
