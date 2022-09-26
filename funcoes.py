@@ -17,6 +17,9 @@ def distancia(a,b,n):
         d = d + (a[i] - b[i])**2      
     return sqrt(d)
 
+def getRaio():
+    return 0.025
+
 #Retorna a Matriz de transformacao Homogeneada usando como entrada os parametros de DH
 def matriz_homogenea(d,a,alfa,theta):
     L1 = np.array([cos(theta), -sin(theta)*cos(alfa),\
