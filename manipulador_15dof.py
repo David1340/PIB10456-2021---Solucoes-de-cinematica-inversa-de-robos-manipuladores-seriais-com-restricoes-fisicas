@@ -8,7 +8,7 @@
 
 from  math import pi
 import numpy as np
-from funcoes import matriz_homogenea, S
+from funcoes import matriz_homogenea, S, Esfera, deteccao_de_colisao
 from random import uniform
 
 def getDH_paramaters(q):
@@ -32,6 +32,9 @@ def getDH_paramaters(q):
     p_n = np.array([[0,0,L,1]]).T #ponto de atuação do manipulador no sistema de coordenadas on xn yn zn
     return d,a,alpha,theta,p_n.copy()
 
+def getRaio():
+    return 0.025
+
 def getLimits():
     qlim = [2.6179,1.6144,2.6179,1.6144,2.6179,
         1.6144, 2.6179, 1.6144, 2.6179, 1.6144, 2.6179, 1.6144, 2.6179,
@@ -48,7 +51,7 @@ def getAlphasNegatives():
             False,False] 
 
 #Calcula a posição das juntas a partir da configuração q
-def Cinematica_Direta(q):
+def Cinematica_Direta(q,orientacao = False):
     #Pontos de interesse
     p = np.array([[0,0,0,1]]).T #Base
     p1_1 = np.array([[0,-0.05,0,1]]).T #junta1
@@ -128,6 +131,10 @@ def Cinematica_Direta(q):
                     ,p5_0[0:3,0],p6_0[0:3,0],p7_0[0:3,0],p8_0[0:3,0]
                     ,p9_0[0:3,0],p10_0[0:3,0],p11_0[0:3,0],p12_0[0:3,0]
                     ,p13_0[0:3,0],p14_0[0:3,0],p15_0[0:3,0],pn_0[0:3,0]]).T
+
+    if(orientacao):
+        return pontos,T15[0:3,0:3]
+
     return pontos
 
 #Calcula as posições das juntas e seus eixos de atuação
@@ -256,7 +263,7 @@ def Cinematica_Direta3(q):
     return [p16_0[0:3] ,T15[0:3,0:3]]
 
 #Gera uma pose alcançável posição + matriz de rotação
-def random_pose(): 
+def random_pose(esferas): 
     #valor maximo que a junta pode assumir
     qlim = getLimits() 
     n = getNumberJoints()
@@ -264,6 +271,23 @@ def random_pose():
     q = np.zeros([n,1])
     for a in range(np.size(q)):
         q[a] = uniform(-qlim[a],qlim[a])
+
+    colidiu = True
+    while(colidiu):
+        colidiu = False
+        
+        for a in range(np.size(q)):
+            q[a] = uniform(-qlim[a],qlim[a])
+
+        pontos = Cinematica_Direta(q)
+        end = np.shape(pontos)[1] -1
+
+        for esfera in esferas:
+            for i in range(end):
+                r = esfera.get_raio() + getRaio()
+                if(deteccao_de_colisao(pontos[:,i],pontos[:,i+1],esfera.get_centro(),r)):
+                    colidiu = True
+                    break
 
     return Cinematica_Direta3(q)
 
