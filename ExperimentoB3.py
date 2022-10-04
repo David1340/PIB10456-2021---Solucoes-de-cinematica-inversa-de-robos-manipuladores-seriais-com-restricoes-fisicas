@@ -28,7 +28,8 @@ from pioneer_7dof import *
 
 #Configurações do experimento
 Kmax = 1000
-erro_min = 0.001
+#erro_min = 0.001
+erro_min = 0.1
 repeticoes = 1
 
 #parâmetros do manipulador
@@ -45,21 +46,24 @@ mi = tc.copy()
 esferas = []
 a = 0.1
 r = 0.025
-esferas.append(Esfera(a,a,0.3,r))
-esferas.append(Esfera(-a,-a,0.3,r))
-esferas.append(Esfera(-a,a,0.3,r))   
-esferas.append(Esfera(a,-a,0.3,r))
+h1 = 0.3
+h2 = 0.2
+h3 = 0.1
+esferas.append(Esfera(a,a,h1,r))
+esferas.append(Esfera(-a,-a,h1,r))
+esferas.append(Esfera(-a,a,h1,r))   
+esferas.append(Esfera(a,-a,h1,r))
 
-esferas.append(Esfera(a,a,0.1,r))
-esferas.append(Esfera(-a,-a,0.1,r))
-esferas.append(Esfera(-a,a,0.1,r))
-esferas.append(Esfera(a,-a,0.1,r))
+esferas.append(Esfera(a,a,h3,r))
+esferas.append(Esfera(-a,-a,h3,r))
+esferas.append(Esfera(-a,a,h3,r))
+esferas.append(Esfera(a,-a,h3,r))
 
 
-esferas.append(Esfera(a,0,0.2,r))
-esferas.append(Esfera(-a,0,0.2,r))
-esferas.append(Esfera(0,a,0.2,r))
-esferas.append(Esfera(0,-a,0.2,r))
+esferas.append(Esfera(a,0,h2,r))
+esferas.append(Esfera(-a,0,h2,r))
+esferas.append(Esfera(0,a,h2,r))
+esferas.append(Esfera(0,-a,h2,r))
 
 for i in range(repeticoes):
     print('i:',i)

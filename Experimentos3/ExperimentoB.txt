@@ -1,0 +1,23 @@
+Metodos: ['FRPSO']
+tc: [100.]
+mi: [5.6]
+Kmax: 1000
+
+apenas posição
+tau = 0.5
+linear e gaussiano
+200 particulas
+com obstáculos:
+    a = 0.1
+    esferas.append(Esfera(a,a,0.3,0.05))
+    esferas.append(Esfera(-a,-a,0.3,0.05))
+    esferas.append(Esfera(-a,a,0.3,0.05))
+    esferas.append(Esfera(a,-a,0.3,0.05))
+
+    esferas.append(Esfera(a,a,0.1,0.05))
+    esferas.append(Esfera(-a,-a,0.1,0.05))
+    esferas.append(Esfera(-a,a,0.1,0.05))
+    esferas.append(Esfera(a,-a,0.1,0.05))
+
+posicaod = np.array([[0.15,0.15,0.3]]).
+orientação arbitrária

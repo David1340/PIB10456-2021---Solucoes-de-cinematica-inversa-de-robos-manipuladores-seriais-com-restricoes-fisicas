@@ -1,0 +1,34 @@
+Metodos: ['FRPSO']
+tc: [99.3]
+mi: [71.24]
+Kmax: 1000
+
+Posição e orientação definidos
+manipulador de 15 juntas
+200 particulas
+tau = 0.5
+Ajuste linear
+distribuição uniforme
+
+#obstáculos
+esferas = []
+a = 0.1
+r = 0.025
+h1 = 0.8
+h2 = 0.6
+h3 = 0.4
+esferas.append(Esfera(a,a,h1,r))
+esferas.append(Esfera(-a,-a,h1,r))
+esferas.append(Esfera(-a,a,h1,r))   
+esferas.append(Esfera(a,-a,h1,r))
+
+esferas.append(Esfera(a,a,h3,r))
+esferas.append(Esfera(-a,-a,h3,r))
+esferas.append(Esfera(-a,a,h3,r))
+esferas.append(Esfera(a,-a,h3,r))
+
+
+esferas.append(Esfera(a,0,h2,r))
+esferas.append(Esfera(-a,0,h2,r))
+esferas.append(Esfera(0,a,h2,r))
+esferas.append(Esfera(0,-a,h2,r))
