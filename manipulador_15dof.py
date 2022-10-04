@@ -263,7 +263,7 @@ def Cinematica_Direta3(q):
     return [p16_0[0:3] ,T15[0:3,0:3]]
 
 #Gera uma pose alcançável posição + matriz de rotação
-def random_pose(esferas): 
+def random_pose(esferas = []): 
     #valor maximo que a junta pode assumir
     qlim = getLimits() 
     n = getNumberJoints()

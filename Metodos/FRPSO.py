@@ -17,7 +17,7 @@ import numpy as np
 #Import das minhas funções
 from funcoes import distancia, orientacao
 #Import das funções associadas ao manipulador usado
-from pioneer_7dof import *
+from manipulador_15dof import *
 
 class particle:
     def __init__(self,position,dimension):
@@ -59,7 +59,7 @@ def FRPSO2(o,o2,number,n,L,erro_min,Kmax):
     k = Kmax     
     q = []
     Nbests = 5
-    tau = 20
+    tau = 0.3
 
     #criando as particulas de dimensão n e calculando o valor de sua função de custo
     for i in range(number):
