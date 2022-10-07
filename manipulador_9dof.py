@@ -13,20 +13,20 @@ from random import uniform
 
 def getDH_paramaters(q):
     base = 0.05
-    d = [0.075 + base, 0, 0.15,
-        0, 0.15, 0, 0.15, 0, 0.15, 0, 0.15,
+    d = [0.075 + base,
+        0, 0.15, 0, 0.15, 0, 0.15,
         0, 0]
-    a = [0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
+    a = [0,
+        0, 0, 0, 0, 0, 0,
         0.075,0]
 
-    alpha = [pi/2, -pi/2, pi/2,
-        -pi/2, pi/2, -pi/2, pi/2, -pi/2, pi/2, -pi/2, pi/2,
+    alpha = [pi/2,
+        -pi/2, pi/2, -pi/2, pi/2, -pi/2, pi/2,
         pi/2, pi/2]
 
     theta = [pi/2 + q[0],q[1],q[2],
-        q[3], q[4], q[5], q[6], q[7], q[8], q[9], q[10],
-        pi/2 + q[11], pi/2 + q[12]]
+        q[3], q[4], q[5], q[6],
+        pi/2 + q[7], pi/2 + q[8]]
 
     L = 0.075 #distância da ultima junta a extremidade do efetuador
     p_n = np.array([[0,0,L,1]]).T #ponto de atuação do manipulador no sistema de coordenadas on xn yn zn
@@ -36,18 +36,18 @@ def getRaio():
     return 0.025
 
 def getLimits():
-    qlim = [2.6179,1.6144,2.6179,
-        1.6144, 2.6179, 1.6144, 2.6179, 1.6144, 2.6179, 1.6144, 2.6179,
+    qlim = [2.6179,
+        1.6144, 2.6179, 1.6144, 2.6179, 1.6144, 2.6179,
         1.8413, 1.7889]
     return qlim
 
 def getNumberJoints():
-    n = 13 #número de juntas
+    n = 9 #número de juntas
     return n
 
 def getAlphasNegatives():
-    return [False,True,False,
-            True,False,True,False,True,False,True,False,
+    return [False,
+            True,False,True,False,True,False,
             False,False] 
 
 #Calcula a posição das juntas a partir da configuração q
@@ -63,16 +63,11 @@ def Cinematica_Direta(q,orientacao = False):
 
     p6_6 = p #junta6
     p7_7 = np.array([[0,-0.075,0,1]]).T #junta7
-    p8_8 = p #junta8
-    p9_9 = np.array([[0,-0.075,0,1]]).T #junta9
 
-    p10_10 = p #junta10
-    p11_11 = np.array([[0,-0.075,0,1]]).T #junta11
+    p8_8 = np.array([[-0.075,0,0,1]]).T #junta8
+    p9_9 = p #junta9
 
-    p12_12 = np.array([[-0.075,0,0,1]]).T #junta14
-    p13_13 = p #junta15
-
-    d,a,alpha,theta,pn_13 = getDH_paramaters(q)
+    d,a,alpha,theta,pn_9 = getDH_paramaters(q)
 
     #Calculando as matrizes homogêneas
     A1 = matriz_homogenea(d[0],a[0],alpha[0],theta[0])
@@ -84,10 +79,6 @@ def Cinematica_Direta(q,orientacao = False):
     A7 = matriz_homogenea(d[6],a[6],alpha[6],theta[6])
     A8 = matriz_homogenea(d[7],a[7],alpha[7],theta[7])
     A9 = matriz_homogenea(d[8],a[8],alpha[8],theta[8])
-    A10 = matriz_homogenea(d[9],a[9],alpha[9],theta[9])
-    A11 = matriz_homogenea(d[10],a[10],alpha[10],theta[10])
-    A12 = matriz_homogenea(d[11],a[11],alpha[11],theta[11])
-    A13 = matriz_homogenea(d[12],a[12],alpha[12],theta[12])
 
     #Calculando os pontos de interesse no sistema Global
     T1 = A1
@@ -99,10 +90,6 @@ def Cinematica_Direta(q,orientacao = False):
     T7 = T6@A7
     T8 = T7@A8
     T9 = T8@A9
-    T10 = T9@A10
-    T11 = T10@A11
-    T12 = T11@A12
-    T13 = T12@A13
 
     p1_0 = T1@p1_1
     p2_0 = T2@p2_2
@@ -113,19 +100,14 @@ def Cinematica_Direta(q,orientacao = False):
     p7_0 = T7@p7_7
     p8_0 = T8@p8_8
     p9_0 = T9@p9_9
-    p10_0 = T10@p10_10
-    p11_0 = T11@p11_11
-    p12_0 = T12@p12_12
-    p13_0 = T13@p13_13
-    pn_0 = T13@pn_13
+    pn_0 = T9@pn_9
 
     pontos = np.array([p1_0[0:3,0],p2_0[0:3,0],p3_0[0:3,0],p4_0[0:3,0]\
                     ,p5_0[0:3,0],p6_0[0:3,0],p7_0[0:3,0],p8_0[0:3,0]
-                    ,p9_0[0:3,0],p10_0[0:3,0],p11_0[0:3,0],p12_0[0:3,0]
-                    ,p13_0[0:3,0],pn_0[0:3,0]]).T
+                    ,p9_0[0:3,0],pn_0[0:3,0]]).T
 
     if(orientacao):
-        return pontos,T13[0:3,0:3]
+        return pontos,T9[0:3,0:3]
 
     return pontos
 
@@ -140,14 +122,10 @@ def Cinematica_Direta2(q):
     p5_5 = np.array([[0,-0.075,0,1]]).T #junta5
     p6_6 = p #junta6
     p7_7 = np.array([[0,-0.075,0,1]]).T #junta7
-    p8_8 = p #junta8
-    p9_9 = np.array([[0,-0.075,0,1]]).T #junta9
-    p10_10 = p #junta10
-    p11_11 = np.array([[0,-0.075,0,1]]).T #junta11
-    p12_12 = np.array([[-0.075,0,0,1]]).T #junta 14
-    p13_13 = p #junta15
+    p8_8 = np.array([[-0.075,0,0,1]]).T #junta 8
+    p9_9 = p #junta9
 
-    d,a,alpha,theta,pn_13 = getDH_paramaters(q)
+    d,a,alpha,theta,pn_9 = getDH_paramaters(q)
 
     #Calculando as matrizes homogêneas
     A1 = matriz_homogenea(d[0],a[0],alpha[0],theta[0])
@@ -159,10 +137,6 @@ def Cinematica_Direta2(q):
     A7 = matriz_homogenea(d[6],a[6],alpha[6],theta[6])
     A8 = matriz_homogenea(d[7],a[7],alpha[7],theta[7])
     A9 = matriz_homogenea(d[8],a[8],alpha[8],theta[8])
-    A10 = matriz_homogenea(d[9],a[9],alpha[9],theta[9])
-    A11 = matriz_homogenea(d[10],a[10],alpha[10],theta[10])
-    A12 = matriz_homogenea(d[11],a[11],alpha[11],theta[11])
-    A13 = matriz_homogenea(d[12],a[12],alpha[12],theta[12])
 
     #Calculando os pontos de interesse no sistema Global
     T1 = A1
@@ -174,10 +148,6 @@ def Cinematica_Direta2(q):
     T7 = T6@A7
     T8 = T7@A8
     T9 = T8@A9
-    T10 = T9@A10
-    T11 = T10@A11
-    T12 = T11@A12
-    T13 = T12@A13
 
     p1_0 = T1@p1_1
     p2_0 = T2@p2_2
@@ -188,26 +158,20 @@ def Cinematica_Direta2(q):
     p7_0 = T7@p7_7
     p8_0 = T8@p8_8
     p9_0 = T9@p9_9
-    p10_0 = T10@p10_10
-    p11_0 = T11@p11_11
-    p12_0 = T12@p12_12
-    p13_0 = T13@p13_13
-    pn_0 = T13@pn_13
+    pn_0 = T9@pn_9
 
     pontos = np.array([p1_0[0:3,0],p2_0[0:3,0],p3_0[0:3,0],p4_0[0:3,0]\
                     ,p5_0[0:3,0],p6_0[0:3,0],p7_0[0:3,0],p8_0[0:3,0]
-                    ,p9_0[0:3,0],p10_0[0:3,0],p11_0[0:3,0],p12_0[0:3,0]
-                    ,p13_0[0:3,0],pn_0[0:3,0]]).T
+                    ,p9_0[0:3,0],pn_0[0:3,0]]).T
 
     vetores = np.array([T1[0:3,1],T2[0:3,1],T3[0:3,1],T4[0:3,1],T5[0:3,1],T6[0:3,1]\
-                        ,T7[0:3,1],T8[0:3,1],T9[0:3,1],T10[0:3,1],T11[0:3,1],T12[0:3,1]\
-                        ,T13[0:3,1]]).T
+                        ,T7[0:3,1],T8[0:3,1],T9[0:3,1]]).T
     return [pontos,vetores]
 
 #Calcula a posição e a matriz de rotação do efetuador final
 def Cinematica_Direta3(q):
     #Pontos de interesse
-    d,a,alpha,theta,p14_13 = getDH_paramaters(q)
+    d,a,alpha,theta,p10_9 = getDH_paramaters(q)
 
     #Calculando as matrizes homogêneas
     A1 = matriz_homogenea(d[0],a[0],alpha[0],theta[0])
@@ -219,10 +183,6 @@ def Cinematica_Direta3(q):
     A7 = matriz_homogenea(d[6],a[6],alpha[6],theta[6])
     A8 = matriz_homogenea(d[7],a[7],alpha[7],theta[7])
     A9 = matriz_homogenea(d[8],a[8],alpha[8],theta[8])
-    A10 = matriz_homogenea(d[9],a[9],alpha[9],theta[9])
-    A11 = matriz_homogenea(d[10],a[10],alpha[10],theta[10])
-    A12 = matriz_homogenea(d[11],a[11],alpha[11],theta[11])
-    A13 = matriz_homogenea(d[12],a[12],alpha[12],theta[12])
 
     #Calculando os pontos de interesse no sistema Global
     T1 = A1
@@ -234,13 +194,9 @@ def Cinematica_Direta3(q):
     T7 = T6@A7
     T8 = T7@A8
     T9 = T8@A9
-    T10 = T9@A10
-    T11 = T10@A11
-    T12 = T11@A12
-    T13 = T12@A13
 
-    p13_0 = T13@p14_13
-    return [p13_0[0:3] ,T13[0:3,0:3]]
+    p10_0 = T9@p10_9
+    return [p10_0[0:3] ,T9[0:3,0:3]]
 
 #Gera uma pose alcançável posição + matriz de rotação
 def random_pose(esferas = []): 
@@ -277,9 +233,9 @@ def jacobianoGeometrico(q):
     #vetores colunas do sistema de coordenadas global
     z = np.array([[0,0,1,1]]).T
     o = np.array([[0,0,0,1]]).T #origem
-    n = 13
+    n = 9
     #Parâmetros de DH e ponto de atuação
-    d,a,alpha,theta,p14_13 = getDH_paramaters(q)
+    d,a,alpha,theta,p10_9 = getDH_paramaters(q)
 
     #Matrizes homogêneas
     #Calculando as matrizes homogêneas
@@ -292,10 +248,6 @@ def jacobianoGeometrico(q):
     A7 = matriz_homogenea(d[6],a[6],alpha[6],theta[6])
     A8 = matriz_homogenea(d[7],a[7],alpha[7],theta[7])
     A9 = matriz_homogenea(d[8],a[8],alpha[8],theta[8])
-    A10 = matriz_homogenea(d[9],a[9],alpha[9],theta[9])
-    A11 = matriz_homogenea(d[10],a[10],alpha[10],theta[10])
-    A12 = matriz_homogenea(d[11],a[11],alpha[11],theta[11])
-    A13 = matriz_homogenea(d[12],a[12],alpha[12],theta[12])
 
     #Definindo os pontos de interesse em seus sistemas locais
     o1_1 = o #origem do SC 1
@@ -307,10 +259,6 @@ def jacobianoGeometrico(q):
     o7_7 = o #origem do SC 7
     o8_8 = o #origem do SC 8
     o9_9 = o #origem do SC 9
-    o10_10 = o #origem do SC 10
-    o11_11 = o #origem do SC 11
-    o12_12 = o #origem do SC 12
-    o13_13 = o #origem do SC 13
 
     #Calculando os pontos de interesse no sistema Global
     T1 = A1
@@ -322,10 +270,6 @@ def jacobianoGeometrico(q):
     T7 = T6@A7
     T8 = T7@A8
     T9 = T8@A9
-    T10 = T9@A10
-    T11 = T10@A11
-    T12 = T11@A12
-    T13 = T12@A13
 
     o1_0 = T1@o1_1
     o2_0 = T2@o2_2
@@ -336,11 +280,8 @@ def jacobianoGeometrico(q):
     o7_0 = T7@o7_7
     o8_0 = T8@o8_8
     o9_0 = T9@o9_9
-    o10_0 = T10@o10_10
-    o11_0 = T11@o11_11
-    o12_0 = T12@o12_12
-    o13_0 = T13@o13_13
-    p14_0 = T13@p14_13
+
+    p10_0 = T9@p10_9
 
     #os vetores z serao transformados em vetores  no R^3
     z0_0 = z[0:3]
@@ -352,32 +293,23 @@ def jacobianoGeometrico(q):
     z6_0 = (T6@z)[0:3]
     z7_0 = (T7@z)[0:3]
     z8_0 = (T8@z)[0:3]
-    z9_0 = (T9@z)[0:3]
-    z10_0 = (T10@z)[0:3]
-    z11_0 = (T11@z)[0:3]
-    z12_0 = (T12@z)[0:3]   
-    #z13_0 = (T15@z)[0:3] nao eh usado.
+    #z9_0 = (T9@z)[0:3] nao eh usado.
 
     #cálculo do Jacobiano geométrico
     J = np.zeros([3,n])
 
     #produto vetorial de Z0_0 por (o7_0 - o) 
-    J[:,0] = S(z0_0)@(o13_0[0:3] - o[0:3])[:,0]
-    J[:,1] = S(z1_0)@(o13_0[0:3] - o1_0[0:3])[:,0]
-    J[:,2] = S(z2_0)@(o13_0[0:3] - o2_0[0:3])[:,0]
-    J[:,3] = S(z3_0)@(o13_0[0:3] - o3_0[0:3])[:,0]
-    J[:,4] = S(z4_0)@(o13_0[0:3] - o4_0[0:3])[:,0]
-    J[:,5] = S(z5_0)@(o13_0[0:3] - o5_0[0:3])[:,0]
-    J[:,6] = S(z6_0)@(o13_0[0:3] - o6_0[0:3])[:,0]
-    J[:,7] = S(z7_0)@(o13_0[0:3] - o7_0[0:3])[:,0]
-    J[:,8] = S(z8_0)@(o13_0[0:3] - o8_0[0:3])[:,0]
-    J[:,9] = S(z9_0)@(o13_0[0:3] - o9_0[0:3])[:,0]
-    J[:,10] = S(z10_0)@(o13_0[0:3] - o10_0[0:3])[:,0]
-    J[:,11] = S(z11_0)@(o13_0[0:3] - o11_0[0:3])[:,0]
-    J[:,12] = S(z12_0)@(o13_0[0:3] - o12_0[0:3])[:,0]
+    J[:,0] = S(z0_0)@(o9_0[0:3] - o[0:3])[:,0]
+    J[:,1] = S(z1_0)@(o9_0[0:3] - o1_0[0:3])[:,0]
+    J[:,2] = S(z2_0)@(o9_0[0:3] - o2_0[0:3])[:,0]
+    J[:,3] = S(z3_0)@(o9_0[0:3] - o3_0[0:3])[:,0]
+    J[:,4] = S(z4_0)@(o9_0[0:3] - o4_0[0:3])[:,0]
+    J[:,5] = S(z5_0)@(o9_0[0:3] - o5_0[0:3])[:,0]
+    J[:,6] = S(z6_0)@(o9_0[0:3] - o6_0[0:3])[:,0]
+    J[:,7] = S(z7_0)@(o9_0[0:3] - o7_0[0:3])[:,0]
+    J[:,8] = S(z8_0)@(o9_0[0:3] - o8_0[0:3])[:,0]
 
-
-    return J,p14_0
+    return J,p10_0
 
 #Calcula o jacobiano considerando apenas a posição e aorientação
 def jacobianoGeometrico2(q):
@@ -387,7 +319,7 @@ def jacobianoGeometrico2(q):
     o = np.array([[0,0,0,1]]).T #origem
 
     #Parâmetros de DH e ponto de atuação
-    d,a,alpha,theta,p14_13 = getDH_paramaters(q)
+    d,a,alpha,theta,p10_9 = getDH_paramaters(q)
 
     #Matrizes homogêneas
     A1 = matriz_homogenea(d[0],a[0],alpha[0],theta[0])
@@ -399,10 +331,6 @@ def jacobianoGeometrico2(q):
     A7 = matriz_homogenea(d[6],a[6],alpha[6],theta[6])
     A8 = matriz_homogenea(d[7],a[7],alpha[7],theta[7])
     A9 = matriz_homogenea(d[8],a[8],alpha[8],theta[8])
-    A10 = matriz_homogenea(d[9],a[9],alpha[9],theta[9])
-    A11 = matriz_homogenea(d[10],a[10],alpha[10],theta[10])
-    A12 = matriz_homogenea(d[11],a[11],alpha[11],theta[11])
-    A13 = matriz_homogenea(d[12],a[12],alpha[12],theta[12])
 
     #Definindo os pontos de interesse em seus sistemas locais
     o1_1 = o #origem do SC 1
@@ -414,10 +342,6 @@ def jacobianoGeometrico2(q):
     o7_7 = o #origem do SC 7
     o8_8 = o #origem do SC 8
     o9_9 = o #origem do SC 9
-    o10_10 = o #origem do SC 10
-    o11_11 = o #origem do SC 11
-    o12_12 = o #origem do SC 12
-    o13_13 = o #origem do SC 13
     
     #Calculando os pontos de interesse no sistema Global
     T1 = A1
@@ -429,10 +353,6 @@ def jacobianoGeometrico2(q):
     T7 = T6@A7
     T8 = T7@A8
     T9 = T8@A9
-    T10 = T9@A10
-    T11 = T10@A11
-    T12 = T11@A12
-    T13 = T12@A13
 
     o1_0 = T1@o1_1
     o2_0 = T2@o2_2
@@ -443,11 +363,7 @@ def jacobianoGeometrico2(q):
     o7_0 = T7@o7_7
     o8_0 = T8@o8_8
     o9_0 = T9@o9_9
-    o10_0 = T10@o10_10
-    o11_0 = T11@o11_11
-    o12_0 = T12@o12_12
-    o13_0 = T13@o13_13
-    p14_0 = T13@p14_13    
+    p10_0 = T9@p10_9  
 
     #os vetores z serao transformados em vetores  no R^3
     z0_0 = z[0:3]
@@ -459,53 +375,39 @@ def jacobianoGeometrico2(q):
     z6_0 = (T6@z)[0:3]
     z7_0 = (T7@z)[0:3]
     z8_0 = (T8@z)[0:3]
-    z9_0 = (T9@z)[0:3]
-    z10_0 = (T10@z)[0:3]
-    z11_0 = (T11@z)[0:3]
-    z12_0 = (T12@z)[0:3]   
-    #z13_0 = (T13@z)[0:3] nao eh usado.
+    #z9_0 = (T9@z)[0:3] nao eh usado.
 
     #cálculo do Jacobiano geométrico
     J = np.zeros([6,13])
 
     #produto vetorial de Z0_0 por (o7_0 - o) 
-    J[0:3,0] = S(z0_0)@(o13_0[0:3] - o[0:3])[:,0]
+    J[0:3,0] = S(z0_0)@(o9_0[0:3] - o[0:3])[:,0]
     J[3:6,0] = z0_0[:,0]
-    J[0:3,1] = S(z1_0)@(o13_0[0:3] - o1_0[0:3])[:,0]
+    J[0:3,1] = S(z1_0)@(o9_0[0:3] - o1_0[0:3])[:,0]
     J[3:6,1] = z1_0[:,0]
-    J[0:3,2] = S(z2_0)@(o13_0[0:3] - o2_0[0:3])[:,0]
+    J[0:3,2] = S(z2_0)@(o9_0[0:3] - o2_0[0:3])[:,0]
     J[3:6,2] = z2_0[:,0]
-    J[0:3,3] = S(z3_0)@(o13_0[0:3] - o3_0[0:3])[:,0]
+    J[0:3,3] = S(z3_0)@(o9_0[0:3] - o3_0[0:3])[:,0]
     J[3:6,3] = z3_0[:,0]
-    J[0:3,4] = S(z4_0)@(o13_0[0:3] - o4_0[0:3])[:,0]
+    J[0:3,4] = S(z4_0)@(o9_0[0:3] - o4_0[0:3])[:,0]
     J[3:6,4] = z4_0[:,0]
-    J[0:3,5] = S(z5_0)@(o13_0[0:3] - o5_0[0:3])[:,0]
+    J[0:3,5] = S(z5_0)@(o9_0[0:3] - o5_0[0:3])[:,0]
     J[3:6,5] = z5_0[:,0]
-    J[0:3,6] = S(z6_0)@(o13_0[0:3] - o6_0[0:3])[:,0]
+    J[0:3,6] = S(z6_0)@(o9_0[0:3] - o6_0[0:3])[:,0]
     J[3:6,6] = z6_0[:,0]
-    J[0:3,7] = S(z7_0)@(o13_0[0:3] - o7_0[0:3])[:,0]
+    J[0:3,7] = S(z7_0)@(o9_0[0:3] - o7_0[0:3])[:,0]
     J[3:6,7] = z7_0[:,0]
-    J[0:3,8] = S(z8_0)@(o13_0[0:3] - o8_0[0:3])[:,0]
+    J[0:3,8] = S(z8_0)@(o9_0[0:3] - o8_0[0:3])[:,0]
     J[3:6,8] = z8_0[:,0]
-    J[0:3,9] = S(z9_0)@(o13_0[0:3] - o9_0[0:3])[:,0]
-    J[3:6,9] = z9_0[:,0]
-    J[0:3,10] = S(z10_0)@(o13_0[0:3] - o10_0[0:3])[:,0]
-    J[3:6,10] = z10_0[:,0]
-    J[0:3,11] = S(z11_0)@(o13_0[0:3] - o11_0[0:3])[:,0]
-    J[3:6,11] = z11_0[:,0]
-    J[0:3,12] = S(z12_0)@(o13_0[0:3] - o12_0[0:3])[:,0]
-    J[3:6,12] = z12_0[:,0]
 
-
-
-    return J,p14_0,T13
+    return J,p10_0,T9
 
 def getLengthElos():
-    return  np.array([0.05,0.075,0.075,0.075,
+    return  np.array([0.05,
             0.075,0.075,0.075,0.075,0.075,
             0.075,0.075,0.075,0.075]) 
 
 def getTypeJoints():
-    return ['pivot','hinge','pivot',
-            'hinge','pivot','hinge','pivot','hinge','pivot',
+    return ['pivot',
+            'hinge','pivot','hinge','pivot',
             'hinge','pivot','hinge','hinge']
