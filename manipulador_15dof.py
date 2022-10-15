@@ -12,13 +12,14 @@ from funcoes import matriz_homogenea, S, Esfera, deteccao_de_colisao
 from random import uniform
 
 def getDH_paramaters(q):
-    base = 0.05
-    d = [0.075 + base, 0, 0.15, 0, 0.15,
-        0, 0.15, 0, 0.15, 0, 0.15, 0, 0.15,
+    elos = getLengthElos
+    base = elos[0]
+    d = [elos[1] + base, 0, elos[2]+elos[3], 0, elos[4]+elos[5],
+        0, elos[6]+elos[7], 0, elos[8]+elos[9], 0, elos[10]+elos[11], 0, elos[12]+elos[13],
         0, 0]
     a = [0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0,
-        0.075,0]
+        elos[14],0]
 
     alpha = [pi/2, -pi/2, pi/2, -pi/2, pi/2,
         -pi/2, pi/2, -pi/2, pi/2, -pi/2, pi/2, -pi/2, pi/2,
@@ -53,25 +54,26 @@ def getAlphasNegatives():
 #Calcula a posição das juntas a partir da configuração q
 def Cinematica_Direta(q,orientacao = False):
     #Pontos de interesse
+    elos = getLengthElos()
     p = np.array([[0,0,0,1]]).T #Base
-    p1_1 = np.array([[0,-0.05,0,1]]).T #junta1
+    p1_1 = np.array([[0,-elos[0],0,1]]).T #junta1
 
     p2_2 = p #junta2
-    p3_3 = np.array([[0,-0.075,0,1]]).T #junta3
+    p3_3 = np.array([[0,-elos[2],0,1]]).T #junta3
     p4_4 = p #junta4
-    p5_5 = np.array([[0,-0.075,0,1]]).T #junta5
+    p5_5 = np.array([[0,-elos[4],0,1]]).T #junta5
 
     p6_6 = p #junta6
-    p7_7 = np.array([[0,-0.075,0,1]]).T #junta7
+    p7_7 = np.array([[0,-elos[6],0,1]]).T #junta7
     p8_8 = p #junta8
-    p9_9 = np.array([[0,-0.075,0,1]]).T #junta9
+    p9_9 = np.array([[0,-elos[8],0,1]]).T #junta9
 
     p10_10 = p #junta10
-    p11_11 = np.array([[0,-0.075,0,1]]).T #junta11
+    p11_11 = np.array([[0,-elos[10],0,1]]).T #junta11
     p12_12 = p #junta12
-    p13_13 = np.array([[0,-0.075,0,1]]).T #junta13
+    p13_13 = np.array([[0,-elos[12],0,1]]).T #junta13
 
-    p14_14 = np.array([[-0.075,0,0,1]]).T #junta14
+    p14_14 = np.array([[-elos[13],0,0,1]]).T #junta14
     p15_15 = p #junta15
 
     d,a,alpha,theta,pn_15 = getDH_paramaters(q)
@@ -140,23 +142,27 @@ def Cinematica_Direta(q,orientacao = False):
 #Calcula as posições das juntas e seus eixos de atuação
 def Cinematica_Direta2(q):
     #Pontos de interesse
+    elos = getLengthElos()
     p = np.array([[0,0,0,1]]).T #Base
-    p1_1 = np.array([[0,-0.05,0,1]]).T #junta1
-    p2_2 = p #junta2
-    p3_3 = np.array([[0,-0.075,0,1]]).T #junta3
-    p4_4 = p #junta4
-    p5_5 = np.array([[0,-0.075,0,1]]).T #junta5
-    p6_6 = p #junta6
-    p7_7 = np.array([[0,-0.075,0,1]]).T #junta7
-    p8_8 = p #junta8
-    p9_9 = np.array([[0,-0.075,0,1]]).T #junta9
-    p10_10 = p #junta10
-    p11_11 = np.array([[0,-0.075,0,1]]).T #junta11
-    p12_12 = p #junta12
-    p13_13 = np.array([[0,-0.075,0,1]]).T #junta13
-    p14_14 = np.array([[-0.075,0,0,1]]).T #junta 14
-    p15_15 = p #junta15
+    p1_1 = np.array([[0,-elos[0],0,1]]).T #junta1
 
+    p2_2 = p #junta2
+    p3_3 = np.array([[0,-elos[2],0,1]]).T #junta3
+    p4_4 = p #junta4
+    p5_5 = np.array([[0,-elos[4],0,1]]).T #junta5
+
+    p6_6 = p #junta6
+    p7_7 = np.array([[0,-elos[6],0,1]]).T #junta7
+    p8_8 = p #junta8
+    p9_9 = np.array([[0,-elos[8],0,1]]).T #junta9
+
+    p10_10 = p #junta10
+    p11_11 = np.array([[0,-elos[10],0,1]]).T #junta11
+    p12_12 = p #junta12
+    p13_13 = np.array([[0,-elos[12],0,1]]).T #junta13
+
+    p14_14 = np.array([[-elos[13],0,0,1]]).T #junta14
+    p15_15 = p #junta15
     d,a,alpha,theta,pn_15 = getDH_paramaters(q)
 
     #Calculando as matrizes homogêneas
@@ -545,7 +551,8 @@ def jacobianoGeometrico2(q):
     return J,p16_0,T15
 
 def getLengthElos():
-    return  np.array([0.05,0.075,0.075,0.075,0.075,0.075,
+    k = 1
+    return  k*np.array([0.05,0.075,0.075,0.075,0.075,0.075,
             0.075,0.075,0.075,0.075,0.075,0.075,0.075,
             0.075,0.075]) 
 

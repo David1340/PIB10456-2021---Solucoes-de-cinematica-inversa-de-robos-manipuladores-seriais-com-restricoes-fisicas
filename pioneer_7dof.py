@@ -13,9 +13,10 @@ from random import uniform
 import matplotlib.pyplot as plt
 
 def getDH_paramaters(q):
-    base = 0.05
-    d = [0.075 + base,0,0.15,0,0.145,0,0]
-    a = [0,0,0,0,0,0.075,0]
+    elos = getLengthElos()
+    base = elos[0]
+    d = [elos[1] + base,0,elos[2] + elos[3],0,elos[4]+elos[5],0,0]
+    a = [0,0,0,0,0,elos[6],0]
     alpha = [pi/2,-pi/2,pi/2,-pi/2,pi/2,pi/2,pi/2]
     theta = [pi/2 + q[0],q[1],q[2],q[3],q[4],pi/2 + q[5],pi/2 + q[6]]
     #distância da ultima junta a extremidade do efetuador
@@ -41,13 +42,14 @@ def getAlphasNegatives():
 #Calcula a posição das juntas a partir da configuração q
 def Cinematica_Direta(q,orientacao = False):
     #Pontos de interesse
+    elos = getLengthElos()
     p = np.array([[0,0,0,1]]).T #Base
-    p1_1 = np.array([[0,-0.05,0,1]]).T #junta1
+    p1_1 = np.array([[0,-elos[0],0,1]]).T #junta1
     p2_2 = p #junta2
-    p3_3 = np.array([[0,-0.075,0,1]]).T #junta3
+    p3_3 = np.array([[0,-elos[2],0,1]]).T #junta3
     p4_4 = p #junta4
-    p5_5 = np.array([[0,-0.0725,0,1]]).T #junta5
-    p6_6 = np.array([[-0.075,0,0,1]]).T #junta6
+    p5_5 = np.array([[0,-elos[4],0,1]]).T #junta5
+    p6_6 = np.array([[-elos[5],0,0,1]]).T #junta6
     p7_7 = p #junta7
 
     d,a,alpha,theta,p8_7 = getDH_paramaters(q)
@@ -88,13 +90,14 @@ def Cinematica_Direta(q,orientacao = False):
 #Calcula as posições das juntas e seus eixos de atuação
 def Cinematica_Direta2(q):
     #Pontos de interesse
+    elos = getLengthElos()
     p = np.array([[0,0,0,1]]).T #Base
-    p1_1 = np.array([[0,-0.05,0,1]]).T #junta1
+    p1_1 = np.array([[0,-elos[0],0,1]]).T #junta1
     p2_2 = p #junta2
-    p3_3 = np.array([[0,-0.075,0,1]]).T #junta3
+    p3_3 = np.array([[0,-elos[2],0,1]]).T #junta3
     p4_4 = p #junta4
-    p5_5 = np.array([[0,-0.0725,0,1]]).T #junta5
-    p6_6 = np.array([[-0.075,0,0,1]]).T #junta6
+    p5_5 = np.array([[0,-elos[4],0,1]]).T #junta5
+    p6_6 = np.array([[-elos[5],0,0,1]]).T #junta6
     p7_7 = p #junta7
 
     d,a,alpha,theta,p8_7 = getDH_paramaters(q)
@@ -324,7 +327,8 @@ def jacobianoGeometrico2(q):
     return J,p8_0,T7
 
 def getLengthElos():
-    return  np.array([0.05,0.075,0.075,0.0725,0.0725,0.075,0.075]) 
+    k = 1
+    return  k*np.array([0.05,0.075,0.075,0.0725,0.0725,0.075,0.075]) 
 
 def getTypeJoints():
     return ['pivot','hinge','pivot','hinge','pivot','hinge','hinge']
