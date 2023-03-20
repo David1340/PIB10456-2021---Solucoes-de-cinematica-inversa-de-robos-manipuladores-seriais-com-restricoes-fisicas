@@ -12,7 +12,7 @@ from funcoes import matriz_homogenea, S, Esfera, deteccao_de_colisao
 from random import uniform
 
 def getDH_paramaters(q):
-    elos = getLengthElos
+    elos = getLengthElos()
     base = elos[0]
     d = [elos[1] + base, 0, elos[2]+elos[3], 0, elos[4]+elos[5],
         0, elos[6]+elos[7], 0, elos[8]+elos[9], 0, elos[10]+elos[11], 0, elos[12]+elos[13],

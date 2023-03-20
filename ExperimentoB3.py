@@ -22,13 +22,12 @@ else:
     sys.path.append(diretorio_atual + '/Metodos')
 
 #Import dos métodos
-from FRPSO import FRPSO
-from pioneer_7dof import *
-
+from PSO import PSO
+from manipulador_15dof import *
 #Configurações do experimento
 Kmax = 1000
 erro_min = 0.001
-repeticoes = 1000
+repeticoes = 1000   
 
 #parâmetros do manipulador
 qlim = getLimits() 
@@ -50,7 +49,7 @@ for i in range(repeticoes):
 
     [posicaod,orientacaod] = random_pose()
     
-    [erro,k] = FRPSO(posicaod,orientacaod,erro_min,Kmax)
+    [erro,k] = PSO(posicaod,orientacaod,erro_min,Kmax)
 
     if(erro < erro_min):
         kFRPSO.append(k)
@@ -62,7 +61,7 @@ mi[0] = np.mean(kFRPSO)
 
 print(tc)
 print(np.round(mi,2))
-metodos = ["FRPSO"]
+metodos = ["PSO"]
 arquivo = open("ExperimentoB3.txt", "w")
 arquivo.write("Metodos: " + str(metodos) + "\n")
 arquivo.write("tc: " + str(np.round(tc,2)) + "\n")

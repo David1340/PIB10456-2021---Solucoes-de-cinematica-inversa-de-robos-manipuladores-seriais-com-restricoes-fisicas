@@ -23,13 +23,13 @@ else:
     sys.path.append(diretorio_atual + '/Metodos2')
 
 #Import dos métodos
-from FRPSO import FRPSO
+from PSO import PSO
 from manipulador_15dof import *
 
 #Configurações do experimento
 Kmax = 1000
 erro_min = 0.001
-repeticoes = 1
+repeticoes = 1000
 
 #parâmetros do manipulador
 qlim = getLimits() 
@@ -45,9 +45,9 @@ mi = tc.copy()
 esferas = []
 a = 0.1
 r = 0.025
-h1 = 0.3
-h2 = 0.2
-h3 = 0.1
+h1 = 0.6
+h2 = 0.4
+h3 = 0.2
 esferas.append(Esfera(a,a,h1,r))
 esferas.append(Esfera(-a,-a,h1,r))
 esferas.append(Esfera(-a,a,h1,r))   
@@ -75,7 +75,7 @@ for i in range(repeticoes):
     
     #posicaod = np.array([[0.15,0.15,0.3]]).T
     
-    [erro,k] = FRPSO(posicaod,orientacaod,erro_min,Kmax,esferas)
+    [erro,k] = PSO(posicaod,orientacaod,erro_min,Kmax,esferas)
     #[erro,k] = FRPSO(posicaod,orientacaod,erro_min,Kmax)
     if(erro < erro_min):
         kFRPSO.append(k)
@@ -87,7 +87,7 @@ mi[0] = np.mean(kFRPSO)
 
 print(tc)
 print(np.round(mi,2))
-metodos = ["FRPSO"]
+metodos = ["PSO"]
 arquivo = open("ExperimentoB3.txt", "w")
 arquivo.write("Metodos: " + str(metodos) + "\n")
 arquivo.write("tc: " + str(np.round(tc,2)) + "\n")

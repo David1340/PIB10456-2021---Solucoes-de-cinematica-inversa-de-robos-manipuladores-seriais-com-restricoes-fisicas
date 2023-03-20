@@ -16,7 +16,7 @@ import numpy as np
 #Import das minhas funções
 from funcoes import distancia, orientacao
 #Import das funções associadas ao manipulador
-from pioneer_7dof import *
+from manipulador_15dof import *
 
 class particle:
     def __init__(self,position,dimension):
@@ -31,11 +31,12 @@ class particle:
 
     def update_position(self,qbest,L): #Atualiza a posição da particula/configuração do robô
         c1 = 1 #grupo
-        c2 = 1 #individual
+        c2 = 0.1 #individual
         for i in range(self.n):
-            w = 0.5 #+ random()/2
-            vmax = np.inf
+            w = 0.5 + random()/2
+            vmax = 0.1 #np.inf
             #w = random()
+
             self.v[i] = w*self.v[i] + c1*random()*(qbest[i] - self.p[i])+ c2*random()*(self.bp[i] - self.p[i])
             if(self.v[i] > vmax):
                 self.v[i] = vmax
