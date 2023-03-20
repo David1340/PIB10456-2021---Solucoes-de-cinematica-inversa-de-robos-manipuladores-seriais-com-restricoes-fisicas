@@ -1,0 +1,4 @@
+Metodos: ['PSO']
+tc: [97.3]
+mi: [87.5]
+Kmax: 1000
