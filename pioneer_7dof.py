@@ -328,7 +328,7 @@ def jacobianoGeometrico2(q):
 
 def getLengthElos():
     k = 1
-    return  k*np.array([0.05,0.075,0.075,0.0725,0.0725,0.075,0.075]) 
+    return  k*np.array([0.05,0.075,0.075,0.075,0.0725,0.0725,0.075]) 
 
 def getTypeJoints():
     return ['pivot','hinge','pivot','hinge','pivot','hinge','hinge']
