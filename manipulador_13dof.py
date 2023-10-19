@@ -508,7 +508,7 @@ def jacobianoGeometrico2(q):
     return J,p14_0,T13
 
 def getLengthElos():
-    k = 10
+    k = 1
     return  k*np.array([0.05,0.075,0.075,0.075,
             0.075,0.075,0.075,0.075,0.075,
             0.075,0.075,0.075,0.075]) 
