@@ -127,9 +127,10 @@ def deteccao_de_colisao(pr1,pr2,p,raio):
     v = pr2 - pr1
     u = p - pr1
     #Seja w a projeção de u em v então w = k*v
-    #em que w = dot(u,v)/norm(v)^2
-    k = np.dot(u,v)/np.sum(np.square(v))
-    if(k > 1 or k < 0): #Se a projeção de p não está no segmento de reta pr1->pr2
+    #em que w = dot(u,v)/norm(v)^2 * v
+    N_v = np.linalg.norm(v) #norma de v
+    k = np.dot(u,v)/(N_v**2)
+    if(k > N_v or k < 0): #Se a projeção de u não está no segmento de reta pr1->pr2
         if(np.sqrt(np.sum((pr1 - p)**2)) <= raio):
             return True
 
